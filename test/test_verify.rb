@@ -5,13 +5,13 @@ require "argon2id"
 
 class TestVerify < Minitest::Test
   def test_returns_true_with_correct_password
-    encoded = Argon2id.hash_encoded(2, 19456, 1, "opensesame", OpenSSL::Random.random_bytes(16), 32)
+    encoded = Argon2id.hash_encoded(2, 256, 1, "password", "somesalt", 32)
 
-    assert Argon2id.verify(encoded, "opensesame")
+    assert Argon2id.verify(encoded, "password")
   end
 
   def test_returns_false_with_incorrect_password
-    encoded = Argon2id.hash_encoded(2, 19456, 1, "opensesame", OpenSSL::Random.random_bytes(16), 32)
+    encoded = Argon2id.hash_encoded(2, 256, 1, "password", "somesalt", 32)
 
     refute Argon2id.verify(encoded, "notopensesame")
   end
