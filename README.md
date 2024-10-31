@@ -3,6 +3,8 @@
 Ruby bindings to the reference C implementation of [Argon2][], the password-hashing
 function that won the 2015 [Password Hashing Competition][].
 
+[![Build Status](https://github.com/mudge/argon2id/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/mudge/argon2id/actions)
+
 **Current version:** 0.1.0  
 **Bundled Argon2 version:** libargon2.1 (20190702)
 
