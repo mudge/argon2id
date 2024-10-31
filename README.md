@@ -11,8 +11,12 @@ function that won the 2015 [Password Hashing Competition][].
 ```ruby
 Argon2::Password.create("opensesame").to_s
 #=> "$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU"
-Argon2::Password.create("opensesame") == "opensesame"    #=> true
-Argon2::Password.create("opensesame") == "notopensesame" #=> false
+
+Argon2::Password.create("opensesame") == "opensesame"
+#=> true
+
+Argon2::Password.new("$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU") == "opensesame"
+#=> true
 ```
 
 ## Table of contents
