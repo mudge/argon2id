@@ -7,6 +7,17 @@
 
 VALUE mArgon2id, cArgon2idError;
 
+/* call-seq: Argon2id.hash_encode(t_cost, m_cost, parallelism, pwd, salt, output_len)
+ *
+ * Hashes a password with Argon2id, producing an encoded hash.
+ *
+ * - +t_cost+: number of iterations
+ * - +m_cost+: sets memory usage to +m_cost+ kibibytes
+ * - +parallelism+: number of threads and compute lanes
+ * - +pwd+: the password
+ * - +salt+: the salt
+ * - +output_len+: desired length of the hash in bytes
+ */
 static VALUE
 rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE threads, VALUE pwd, VALUE salt, VALUE hashlen)
 {
@@ -42,6 +53,10 @@ rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE thr
   return hash;
 }
 
+/* call-seq: Argon2id.verify(encoded, pwd)
+ *
+ * Verifies a password against an encoded string.
+ */
 static VALUE
 rb_argon2id_verify(VALUE module, VALUE encoded, VALUE pwd) {
   int result;

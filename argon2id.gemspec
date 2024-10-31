@@ -51,6 +51,7 @@ Gem::Specification.new do |s|
     "test/test_password.rb",
     "test/test_verify.rb"
   ]
+  s.rdoc_options = ["--main", "README.md"]
 
   s.add_development_dependency("rake-compiler", "~> 1.2")
   s.add_development_dependency("rake-compiler-dock", "~> 1.5")

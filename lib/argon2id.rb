@@ -24,6 +24,19 @@ module Argon2id
   @output_len = DEFAULT_OUTPUT_LEN
 
   class << self
-    attr_accessor :t_cost, :m_cost, :parallelism, :salt_len, :output_len
+    # The default number of iterations used by Argon2id::Password.create
+    attr_accessor :t_cost
+
+    # The default memory cost in kibibytes used by Argon2id::Password.create
+    attr_accessor :m_cost
+
+    # The default number of threads and compute lanes used by Argon2id::Password.create
+    attr_accessor :parallelism
+
+    # The default salt size in bytes used by Argon2id::Password.create
+    attr_accessor :salt_len
+
+    # The default desired length of the hash in bytes used by Argon2id::Password.create
+    attr_accessor :output_len
   end
 end
