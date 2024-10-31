@@ -24,7 +24,7 @@ rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE thr
   outlen = FIX2INT(hashlen);
 
   encodedlen = argon2_encodedlen(t_cost, m_cost, parallelism, (uint32_t)RSTRING_LEN(salt), (uint32_t)outlen, Argon2_id);
-  encoded = malloc(encodedlen + 1);
+  encoded = malloc(encodedlen);
   if (!encoded) {
     rb_raise(rb_eNoMemError, "not enough memory to allocate for encoded password");
   }
