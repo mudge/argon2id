@@ -1,4 +1,4 @@
-# Argon2id - Ruby bindings to the award-winning password-hashing function
+# Argon2id - Ruby bindings to the OWASP recommended password-hashing function
 
 Ruby bindings to the reference C implementation of [Argon2][], the password-hashing
 function that won the 2015 [Password Hashing Competition][].
@@ -159,6 +159,17 @@ This gem requires the following to run:
 * [Ruby](https://www.ruby-lang.org/en/) 2.6 to 3.3
 
 ### Native gems
+
+Where possible, a pre-compiled native gem will be provided for the following platforms:
+
+* Linux
+    * `aarch64-linux` and `arm-linux` (requires [glibc](https://www.gnu.org/software/libc/) 2.29+)
+    * `x86-linux` and `x86_64-linux` (requires [glibc](https://www.gnu.org/software/libc/) 2.17+)
+    * [musl](https://musl.libc.org/)-based systems such as [Alpine](https://alpinelinux.org) are supported as long as a [glibc-compatible library is installed](https://wiki.alpinelinux.org/wiki/Running_glibc_programs)
+* macOS `x86_64-darwin` and `arm64-darwin`
+* Windows `x64-mingw32` and `x64-mingw-ucrt`
+
+### Verifying the gems
 
 SHA256 checksums are included in the [release
 notes](https://github.com/mudge/argon2id/releases) for each version and can be
