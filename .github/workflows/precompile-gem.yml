@@ -1,0 +1,23 @@
+name: Precompile native gem
+
+on:
+  workflow_call:
+    inputs:
+      platform:
+        required: true
+        type: string
+
+jobs:
+  precompile-gem:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - run: bundle exec rake gem:${{ inputs.platform }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "cruby-${{ inputs.platform }}-gem"
+          path: pkg/*.gem

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -eu
+
+gem install --no-document pkg/*.gem -- "$@"
+cd "$(dirname "$(gem which argon2id)")/.."
+bundle
+bundle exec rake test
