@@ -219,7 +219,8 @@ plus the toolchain required for compiling the vendored version of Argon2.
 ## Thanks
 
 * Thanks to [Mike Dalessio](https://github.com/flavorjones) for his advice and
-  work on [MiniPortile](https://github.com/flavorjones/mini_portile)
+ [Ruby C Extensions Explained](https://github.com/flavorjones/ruby-c-extensions-explained)
+ project
 
 ## Contact
 
@@ -234,10 +235,10 @@ Copyright © 2024, Paul Mucur.
 
 ### Dependencies
 
-The source code of [Argon2][] is distributed in the `ruby` platform gem. This
-code is copyright © 2015 Daniel Dinu, Dmitry Khovratovich (main authors),
-Jean-Philippe Aumasson and Samuel Neves, and dual licensed under the [CC0
-License][] and the [Apache 2.0 License][].
+The source code of [Argon2][] is distributed in the gem. This code is copyright
+© 2015 Daniel Dinu, Dmitry Khovratovich (main authors), Jean-Philippe Aumasson
+and Samuel Neves, and dual licensed under the [CC0 License][] and the [Apache
+2.0 License][].
 
   [Argon2]: https://github.com/P-H-C/phc-winner-argon2/
   [OWASP Password Storage Cheat Sheet]: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#argon2id

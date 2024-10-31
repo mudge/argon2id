@@ -29,7 +29,21 @@ Gem::Specification.new do |s|
     "argon2id.gemspec",
     "ext/argon2id/argon2id.c",
     "ext/argon2id/extconf.rb",
-    "ext/argon2id/recipe.rb",
+    "ext/argon2id/libargon2/LICENSE",
+    "ext/argon2id/libargon2/argon2.c",
+    "ext/argon2id/libargon2/argon2.h",
+    "ext/argon2id/libargon2/blake2/blake2-impl.h",
+    "ext/argon2id/libargon2/blake2/blake2.h",
+    "ext/argon2id/libargon2/blake2/blake2b.c",
+    "ext/argon2id/libargon2/blake2/blamka-round-opt.h",
+    "ext/argon2id/libargon2/blake2/blamka-round-ref.h",
+    "ext/argon2id/libargon2/core.c",
+    "ext/argon2id/libargon2/core.h",
+    "ext/argon2id/libargon2/encoding.c",
+    "ext/argon2id/libargon2/encoding.h",
+    "ext/argon2id/libargon2/ref.c",
+    "ext/argon2id/libargon2/thread.c",
+    "ext/argon2id/libargon2/thread.h",
     "lib/argon2id.rb",
     "lib/argon2id/password.rb",
     "lib/argon2id/version.rb",
@@ -38,7 +52,6 @@ Gem::Specification.new do |s|
     "test/test_verify.rb"
   ]
 
-  s.add_runtime_dependency("mini_portile2", "~> 2.8.7")
   s.add_development_dependency("rake-compiler", "~> 1.2")
   s.add_development_dependency("rake-compiler-dock", "~> 1.5")
   s.add_development_dependency("minitest", "~> 5.25")
