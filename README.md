@@ -229,7 +229,7 @@ Issues](https://github.com/mudge/argon2id/issues).
 
 ## License
 
-This library is licensed under the BSD 3-Clause License, see `LICENSE.txt`.
+This library is licensed under the BSD 3-Clause License, see `LICENSE`.
 
 Copyright © 2024, Paul Mucur.
 
