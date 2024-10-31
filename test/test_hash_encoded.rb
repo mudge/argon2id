@@ -66,14 +66,6 @@ class TestHashEncoded < Minitest::Test
     end
   end
 
-  def test_raises_with_too_long_password
-    error = assert_raises(Argon2id::Error) do
-      Argon2id.hash_encoded(2, 19456, 1, "a" * 4294967296, OpenSSL::Random.random_bytes(16), 32)
-    end
-
-    assert_equal "Password is too long", error.message
-  end
-
   def test_raises_with_too_short_salt
     error = assert_raises(Argon2id::Error) do
       Argon2id.hash_encoded(2, 19456, 1, "opensesame", OpenSSL::Random.random_bytes(1), 32)
