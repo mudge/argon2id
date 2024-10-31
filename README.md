@@ -1,7 +1,7 @@
 # Argon2id - Ruby bindings to the award-winning password-hashing function
 
 Ruby bindings to the reference C implementation of [Argon2][], the password-hashing
-function that won the 2015 Password Hashing Competition.
+function that won the 2015 [Password Hashing Competition][].
 
 [![Build Status](https://github.com/mudge/argon2id/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/mudge/argon2id/actions)
 
@@ -42,13 +42,13 @@ Argon2::Password.create("opensesame") == "notopensesame" #=> false
 > tradeoff attacks (by exploiting the cache and memory organization of the
 > recent processors).
 
--- [Argon2][]
+— [Argon2][]
 
 > Argon2 was the winner of the 2015 Password Hashing Competition. Out of the
 > three Argon2 versions, use the Argon2id variant since it provides a balanced
 > approach to resisting both side-channel and GPU-based attacks.
 
--- [OWASP Password Storage Cheat Sheet][]
+— [OWASP Password Storage Cheat Sheet][]
 
 ## Usage
 
@@ -70,8 +70,7 @@ require "argon2id"
 
 ### Hashing passwords
 
-Hash a plain text password (e.g. from user input) using the second set of
-parameters recommended by [OWASP][OWASP Password Storage Cheat Sheet] with
+Hash a plain text password (e.g. from user input) with
 `Argon2id::Password.create`:
 
 ```ruby
@@ -86,8 +85,9 @@ password.to_s
 #=> "$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU"
 ```
 
-Argon2id's various parameters can be overridden by passing keyword arguments to
-`Argon2id::Password.create`:
+By default, `Argon2id::Password.create` will use the second set of parameters
+recommended by [OWASP][OWASP Password Storage Cheat Sheet] but these can be
+overridden by passing keyword arguments to `Argon2id::Password.create`:
 
 * `t_cost`: the "time cost" given as a number of iterations (defaults to 2)
 * `m_cost`: the "memory cost" given in kibibytes (defaults to 19 mebibytes)
@@ -122,7 +122,7 @@ password == "opensesame"    #=> true
 password == "notopensesame" #=> false
 ```
 
-Or, if you are retrieving a persisted password from storage:
+Or, if you only have the hash (e.g. retrieved from storage):
 
 ```ruby
 password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU")
@@ -244,3 +244,4 @@ License][] and the [Apache 2.0 License][].
   [bcrypt-ruby]: https://github.com/bcrypt-ruby/bcrypt-ruby
   [CC0 License]: https://creativecommons.org/about/cc0
   [Apache 2.0 License]: https://www.apache.org/licenses/LICENSE-2.0
+  [Password Hashing Competition]: https://www.password-hashing.net
