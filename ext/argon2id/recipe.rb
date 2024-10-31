@@ -17,32 +17,46 @@ def libargon2_recipe
     end
 
     def compile
-      cflags = [ENV["CFLAGS"], "-fPIC"].compact.join(" ")
-      env = {
-        "PREFIX" => File.expand_path(port_path),
-        "LIBRARY_REL" => "lib",
-        "CC" => gcc_cmd,
-        "CFLAGS" => cflags
-      }
+      # libargon2's Makefile shells out to uname to determine the host platform
+      # which doesn't work when cross-compiling. Instead, we manually compile
+      # the necessary source files and generate only the static library in the
+      # hopes that it is compatible across the most platforms.
+      cflags = [ENV["CFLAGS"], "-std=c89", "-O3", "-Wall", "-g", "-Iinclude", "-Isrc", "-fPIC", "-pthread"].compact.join(" ")
+      objs = %w[argon2 core blake2/blake2b thread encoding ref]
+      objs.each do |obj|
+        execute("compile-#{File.basename(obj)}", "#{gcc_cmd} #{cflags} -c -o src/#{obj}.o src/#{obj}.c")
+      end
+
+      ar_cmd = ENV["AR"] || "ar"
+      arflags = ENV["ARFLAGS"] || "rcs"
+
+      # Thanks to @flavorjones for this, see
+      # https://github.com/sparklemotion/nokogiri/blob/e05b9949b794ca94b37a90f2fb2555d99a37daa5/ext/nokogiri/extconf.rb#L1074-L1127
       if enable_config("cross-build")
-        if host.include?("darwin")
-          env["AR"] = "#{host}-libtool"
-          env["ARFLAGS"] = "-o"
+        case host
+        when /darwin/
+          ar_cmd = "#{host}-libtool"
+          arflags = "-o"
+        when "i686-redhat-linux"
+          ar_cmd = "i686-redhat-linux-gnu-ar"
+        when "x86_64-redhat-linux"
+          ar_cmd = "x86_64-redhat-linux-gnu-ar"
         else
-          env["AR"] = "#{host}-ar"
+          ar_cmd = "#{host}-ar"
         end
       end
 
-      execute("compile", make_cmd, env: env)
+      execute("archive", "#{ar_cmd} #{arflags} libargon2.a #{objs.map { |obj| "src/#{obj}.o" }.join(" ")}")
     end
 
     def install
       return if installed?
 
-      execute("install", "#{make_cmd} install", env: {
-        "PREFIX" => File.expand_path(port_path),
-        "LIBRARY_REL" => "lib"
-      })
+      lib_dir = File.join(port_path, "lib")
+      include_dir = File.join(port_path, "include")
+      FileUtils.mkdir_p([lib_dir, include_dir])
+      FileUtils.cp(File.join(work_path, "libargon2.a"), lib_dir)
+      FileUtils.cp(File.join(work_path, "include", "argon2.h"), include_dir)
     end
   end
 

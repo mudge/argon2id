@@ -26,6 +26,7 @@ Argon2::Password.create("opensesame") == "notopensesame" #=> false
     * [Native gems](#native-gems)
     * [Verifying the gems](#verifying-the-gems)
     * [Installing the `ruby` platform gem](#installing-the-ruby-platform-gem)
+* [Thanks](#thanks)
 * [Contact](#contact)
 * [License](#license)
     * [Dependencies](#dependencies)
@@ -214,6 +215,11 @@ You will need a full compiler toolchain for compiling Ruby C extensions (see
 [Nokogiri's "The Compiler
 Toolchain"](https://nokogiri.org/tutorials/installing_nokogiri.html#appendix-a-the-compiler-toolchain))
 plus the toolchain required for compiling the vendored version of Argon2.
+
+## Thanks
+
+* Thanks to [Mike Dalessio](https://github.com/flavorjones) for his advice and
+  work on [MiniPortile](https://github.com/flavorjones/mini_portile)
 
 ## Contact
 

@@ -4,8 +4,6 @@ require "mkmf"
 
 require_relative "recipe"
 
-# Configure cross-compiler
-RbConfig::CONFIG["CC"] = RbConfig::MAKEFILE_CONFIG["CC"] = ENV["CC"] if ENV["CC"]
 $CFLAGS << " -Wextra"
 
 have_header("stdint.h")
