@@ -1,6 +1,6 @@
 require "rake/extensiontask"
 require "rake_compiler_dock"
-require "rake/testtask"
+require "minitest/test_task"
 
 CLEAN.add("lib/**/*.{o,so,bundle}", "pkg")
 
@@ -27,9 +27,7 @@ Rake::ExtensionTask.new("argon2id", gemspec) do |e|
   e.cross_platform = cross_platforms
 end
 
-Rake::TestTask.new do |t|
-  t.warning = true
-end
+Minitest::TestTask.create
 
 begin
   require "ruby_memcheck"
