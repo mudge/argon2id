@@ -113,10 +113,10 @@ module Argon2id
 
       @encoded = $&
       @type = $1
-      @version = ($2 || 0x10).to_i
-      @m_cost = $3.to_i
-      @t_cost = $4.to_i
-      @parallelism = $5.to_i
+      @version = Integer($2 || 0x10)
+      @m_cost = Integer($3)
+      @t_cost = Integer($4)
+      @parallelism = Integer($5)
       @salt = $6.unpack1("m")
     end
 
