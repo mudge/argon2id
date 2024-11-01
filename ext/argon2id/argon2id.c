@@ -63,7 +63,7 @@ rb_argon2id_verify(VALUE module, VALUE encoded, VALUE pwd) {
 
   UNUSED(module);
 
-  result = argon2id_verify(StringValuePtr(encoded), StringValuePtr(pwd), RSTRING_LEN(pwd));
+  result = argon2id_verify(StringValueCStr(encoded), StringValuePtr(pwd), RSTRING_LEN(pwd));
   if (result == ARGON2_OK) {
     return Qtrue;
   }
