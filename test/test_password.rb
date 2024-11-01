@@ -103,4 +103,10 @@ class TestPassword < Minitest::Test
 
     assert_equal "somesalt", password.salt
   end
+
+  def test_coerces_given_hash_to_string
+    password = Argon2id::Password.create("password")
+
+    assert Argon2id::Password.new(password) == "password"
+  end
 end

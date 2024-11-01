@@ -80,10 +80,10 @@ module Argon2id
     #
     # Raises an ArgumentError if given an invalid hash.
     def initialize(encoded)
-      raise ArgumentError, "invalid hash" unless PATTERN =~ encoded
+      raise ArgumentError, "invalid hash" unless PATTERN =~ String(encoded)
 
-      @encoded = encoded
-      @salt = Base64.decode64(Regexp.last_match(:base64_salt))
+      @encoded = Regexp.last_match(0)
+      @salt = Base64.decode64(Regexp.last_match(1))
     end
 
     # Return the encoded password hash.
