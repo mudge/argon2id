@@ -13,7 +13,7 @@ Argon2id::Password.create("password").to_s
 #=> "$argon2id$v=19$m=19456,t=2,p=1$agNV6OfDL1OwE44WdrFCJw$ITrBwvCsW4b5GjgZuL67RCcvVMEWBWXtASc9TVyI3rY"
 
 password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU")
-password == "password"      #=> true
+password == "password"     #=> true
 password == "not password" #=> false
 
 password.m_cost #=> 19456
@@ -188,11 +188,11 @@ notes](https://github.com/mudge/argon2id/releases) for each version and can be
 checked with `sha256sum`, e.g.
 
 ```console
-$ gem fetch argon2id -v 0.2.1
-Fetching argon2id-0.2.1-arm64-darwin.gem
-Downloaded argon2id-0.2.1-arm64-darwin
-$ sha256sum argon2id-0.2.1-arm64-darwin.gem
-aea93700e989e421dd4e66b99038b9fec1acc9a265fe9d35e2100ceb5c18e5a9  argon2id-0.2.1-arm64-darwin.gem
+$ gem fetch argon2id -v 0.3.0
+Fetching argon2id-0.3.0-arm64-darwin.gem
+Downloaded argon2id-0.3.0-arm64-darwin
+$ sha256sum argon2id-0.3.0-arm64-darwin.gem
+9d49de6840942b48d020dddd422a1577fde7289ccb08a637bdb29f4a09b4e181  argon2id-0.3.0-arm64-darwin.gem
 ```
 
 [GPG](https://www.gnupg.org/) signatures are attached to each release (the
@@ -202,8 +202,8 @@ from a public keyserver, e.g. `gpg --keyserver keyserver.ubuntu.com --recv-key
 0x39AC3530070E0F75`):
 
 ```console
-$ gpg --verify argon2id-0.2.1-arm64-darwin.gem.sig argon2id-0.2.1-arm64-darwin.gem
-gpg: Signature made Fri  1 Nov 15:06:30 2024 GMT
+$ gpg --verify argon2id-0.3.0-arm64-darwin.gem.sig argon2id-0.3.0-arm64-darwin.gem
+gpg: Signature made Fri  1 Nov 18:15:47 2024 GMT
 gpg:                using RSA key 702609D9C790F45B577D7BEC39AC3530070E0F75
 gpg: Good signature from "Paul Mucur <mudge@mudge.name>" [unknown]
 gpg:                 aka "Paul Mucur <paul@ghostcassette.com>" [unknown]
