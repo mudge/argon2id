@@ -109,4 +109,64 @@ class TestPassword < Minitest::Test
 
     assert Argon2id::Password.new(password) == "password"
   end
+
+  def test_extracting_type_from_hash
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal "argon2id", password.type
+  end
+
+  def test_extracting_type_from_argoni_hash
+    password = Argon2id::Password.new("$argon2i$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal "argon2i", password.type
+  end
+
+  def test_extracting_version_from_hash
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 19, password.version
+  end
+
+  def test_extracting_version_from_versionless_hash
+    password = Argon2id::Password.new("$argon2id$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 16, password.version
+  end
+
+  def test_extracting_time_cost_from_hash
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 2, password.t_cost
+  end
+
+  def test_extracting_time_cost_from_versionless_hash
+    password = Argon2id::Password.new("$argon2id$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 2, password.t_cost
+  end
+
+  def test_extracting_memory_cost_from_hash
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 256, password.m_cost
+  end
+
+  def test_extracting_memory_cost_from_versionless_hash
+    password = Argon2id::Password.new("$argon2id$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 256, password.m_cost
+  end
+
+  def test_extracting_parallelism_from_hash
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 1, password.parallelism
+  end
+
+  def test_extracting_parallelism_from_versionless_hash
+    password = Argon2id::Password.new("$argon2id$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal 1, password.parallelism
+  end
 end

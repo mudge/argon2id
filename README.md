@@ -9,14 +9,15 @@ function that won the 2015 [Password Hashing Competition][].
 **Bundled Argon2 version:** libargon2.1 (20190702)
 
 ```ruby
-Argon2id::Password.create("opensesame").to_s
-#=> "$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU"
+Argon2id::Password.create("password").to_s
+#=> "$argon2id$v=19$m=19456,t=2,p=1$agNV6OfDL1OwE44WdrFCJw$ITrBwvCsW4b5GjgZuL67RCcvVMEWBWXtASc9TVyI3rY"
 
-Argon2id::Password.create("opensesame") == "opensesame"
-#=> true
+password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU")
+password == "password"      #=> true
+password == "not password" #=> false
 
-Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU") == "opensesame"
-#=> true
+password.m_cost #=> 19456
+password.salt   #=> "e-\xA7\x04U\x81\xA6{v\xF0x\xED\xCC\xD3\x96\xE3"
 ```
 
 ## Table of contents
@@ -142,12 +143,16 @@ password.is_password?("opensesame")    #=> true
 password.is_password?("notopensesame") #=> false
 ```
 
-The original salt for a password can be retrieved with `Argon2id::Password#salt`:
+The various parameters for the password can be retrieved:
 
 ```ruby
 password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
-password.salt
-#=> "somesalt"
+password.type        #=> "argon2id"
+password.version     #=> 19
+password.m_cost      #=> 256
+password.t_cost      #=> 2
+password.parallelism #=> 1
+password.salt        #=> "somesalt"
 ```
 
 ### Errors
@@ -155,9 +160,8 @@ password.salt
 Any errors returned from Argon2 will be raised as `Argon2id::Error`, e.g.
 
 ```ruby
-password = Argon2id::Password.new("not a valid hash encoding")
-password == "opensesame"
-# Decoding failed (Argon2id::Error)
+Argon2id::Password.create("password", salt_len: 0)
+# Salt is too short (Argon2id::Error)
 ```
 
 ## Requirements

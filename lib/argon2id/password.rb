@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "base64"
 require "openssl"
 
 module Argon2id
@@ -12,23 +11,38 @@ module Argon2id
   #   password.to_s
   #   #=> "$argon2id$v=19$m=19456,t=2,p=1$+Lrjry9Ifq0poLr15OGU1Q$utkDvejJB0ugwm4s9+a+vF6+1a/W+Y3CYa5Wte/85ig"
   #
-  # To verify an encoded Argon2id password hash, use Argon2id::Password.new:
+  # To wrap an encoded Argon2id password hash, use Argon2id::Password.new:
   #
-  #   password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$+Lrjry9Ifq0poLr15OGU1Q$utkDvejJB0ugwm4s9+a+vF6+1a/W+Y3CYa5Wte/85ig")
-  #   password == "password"
-  #   #=> true
+  #   password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+  #
+  # You can then verify it matches a given plain text:
+  #
+  #   password == "password"     #=> true
+  #   password == "not password" #=> false
+  #
+  #   password.is_password?("password")     #=> true
+  #   password.is_password?("not password") #=> false
+  #
+  # You can read various parameters out of a password hash:
+  #
+  #   password.type        #=> "argon2id"
+  #   password.version     #=> 19
+  #   password.m_cost      #=> 19456
+  #   password.t_cost      #=> 2
+  #   password.parallelism #=> 1
+  #   password.salt        #=>  "somesalt"
   class Password
     # A regular expression to match valid hashes.
     PATTERN = %r{
       \A
       \$
-      argon2(?:id|i|d)
-      (?:\$v=\d+)?
-      \$m=\d+
-      ,t=\d+
-      ,p=\d+
+      (argon2(?:id|i|d))
+      (?:\$v=(\d+))?
+      \$m=(\d+)
+      ,t=(\d+)
+      ,p=(\d+)
       \$
-      (?<base64_salt>[a-zA-Z0-9+/]+)
+      ([a-zA-Z0-9+/]+)
       \$
       [a-zA-Z0-9+/]+
       \z
@@ -36,6 +50,21 @@ module Argon2id
 
     # The encoded password hash.
     attr_reader :encoded
+
+    # The type of the hashing function.
+    attr_reader :type
+
+    # The version number of the hashing function.
+    attr_reader :version
+
+    # The "time cost" of the hashing function.
+    attr_reader :t_cost
+
+    # The "memory cost" of the hashing function.
+    attr_reader :m_cost
+
+    # The number of threads and compute lanes of the hashing function.
+    attr_reader :parallelism
 
     # The salt.
     attr_reader :salt
@@ -82,17 +111,20 @@ module Argon2id
     def initialize(encoded)
       raise ArgumentError, "invalid hash" unless PATTERN =~ String(encoded)
 
-      @encoded = Regexp.last_match(0)
-      @salt = Base64.decode64(Regexp.last_match(1))
+      @encoded = $&
+      @type = $1
+      @version = ($2 || 0x10).to_i
+      @m_cost = $3.to_i
+      @t_cost = $4.to_i
+      @parallelism = $5.to_i
+      @salt = $6.unpack1("m")
     end
 
     # Return the encoded password hash.
-    def to_s
-      encoded
-    end
+    alias_method :to_s, :encoded
 
-    # Compare the password with given plain text, returning true if it verifies
-    # successfully.
+    # Compare the password with the given plain text, returning true if it
+    # verifies successfully.
     #
     #   password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$FI8yp1gXbthJCskBlpKPoQ$nOfCCpS2r+I8GRN71cZND4cskn7YKBNzuHUEO3YpY2s")
     #   password == "password"    #=> true
