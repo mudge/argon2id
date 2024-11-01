@@ -15,7 +15,7 @@ module Argon2id
   DEFAULT_T_COST = 2
 
   # The default "memory cost" of 19 mebibytes recommended by OWASP.
-  DEFAULT_M_COST = 19456
+  DEFAULT_M_COST = 19_456
 
   # The default 1 thread and compute lane recommended by OWASP.
   DEFAULT_PARALLELISM = 1

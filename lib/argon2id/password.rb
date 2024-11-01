@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "base64"
 require "openssl"
 
 module Argon2id
@@ -17,8 +18,27 @@ module Argon2id
   #   password == "password"
   #   #=> true
   class Password
+    # A regular expression to match valid hashes.
+    PATTERN = %r{
+      \A
+      \$
+      argon2(?:id|i|d)
+      (?:\$v=\d+)?
+      \$m=\d+
+      ,t=\d+
+      ,p=\d+
+      \$
+      (?<base64_salt>[a-zA-Z0-9+/]+)
+      \$
+      [a-zA-Z0-9+/]+
+      \z
+    }x.freeze
+
     # The encoded password hash.
     attr_reader :encoded
+
+    # The salt.
+    attr_reader :salt
 
     # Create a new Password object that hashes a given plain text password +pwd+.
     #
@@ -57,8 +77,13 @@ module Argon2id
     # Create a new Password with the given encoded password hash.
     #
     #   password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$FI8yp1gXbthJCskBlpKPoQ$nOfCCpS2r+I8GRN71cZND4cskn7YKBNzuHUEO3YpY2s")
+    #
+    # Raises an ArgumentError if given an invalid hash.
     def initialize(encoded)
+      raise ArgumentError, "invalid hash" unless PATTERN =~ encoded
+
       @encoded = encoded
+      @salt = Base64.decode64(Regexp.last_match(:base64_salt))
     end
 
     # Return the encoded password hash.

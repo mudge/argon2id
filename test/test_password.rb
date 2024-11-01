@@ -74,13 +74,33 @@ class TestPassword < Minitest::Test
     refute password.is_password?("notopensesame")
   end
 
-  def test_raises_if_verifying_with_invalid_encoded_password
-    password = Argon2id::Password.new("invalid")
+  def test_salt_returns_the_original_salt
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
 
-    error = assert_raises(Argon2id::Error) do
-      password.is_password?("opensesame")
+    assert_equal "somesalt", password.salt
+  end
+
+  def test_salt_returns_raw_bytes
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$KmIxrXv4lrnSJPO0LN7Gdw$lB3724qLPL9MNi10lkvIb4VxIk3q841CLvq0WTCZ0VQ")
+
+    assert_equal "*b1\xAD{\xF8\x96\xB9\xD2$\xF3\xB4,\xDE\xC6w".b, password.salt
+  end
+
+  def test_raises_for_invalid_hashes
+    assert_raises(ArgumentError) do
+      Argon2id::Password.new("not a valid hash")
     end
+  end
 
-    assert_equal "Decoding failed", error.message
+  def test_raises_for_partial_hashes
+    assert_raises(ArgumentError) do
+      Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$KmIxrXv4lrnSJPO0LN7Gdw")
+    end
+  end
+
+  def test_salt_supports_versionless_hashes
+    password = Argon2id::Password.new("$argon2id$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal "somesalt", password.salt
   end
 end

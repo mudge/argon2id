@@ -142,6 +142,14 @@ password.is_password?("opensesame")    #=> true
 password.is_password?("notopensesame") #=> false
 ```
 
+The original salt for a password can be retrieved with `Argon2id::Password#salt`:
+
+```ruby
+password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+password.salt
+#=> "somesalt"
+```
+
 ### Errors
 
 Any errors returned from Argon2 will be raised as `Argon2id::Error`, e.g.
