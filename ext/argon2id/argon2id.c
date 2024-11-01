@@ -47,7 +47,7 @@ rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE thr
     rb_raise(cArgon2idError, "%s", argon2_error_message(result));
   }
 
-  hash = rb_str_new(encoded, strlen(encoded));
+  hash = rb_str_new_cstr(encoded);
   free(encoded);
 
   return hash;
