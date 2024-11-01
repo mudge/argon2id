@@ -7,7 +7,7 @@
 
 VALUE mArgon2id, cArgon2idError;
 
-/* call-seq: Argon2id.hash_encoded(t_cost, m_cost, parallelism, pwd, salt, output_len)
+/* call-seq: hash_encoded(t_cost, m_cost, parallelism, pwd, salt, output_len)
  *
  * Hashes a password with Argon2id, producing an encoded hash.
  *
@@ -53,7 +53,7 @@ rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE thr
   return hash;
 }
 
-/* call-seq: Argon2id.verify(encoded, pwd)
+/* call-seq: verify(encoded, pwd)
  *
  * Verifies a password against an encoded string.
  */

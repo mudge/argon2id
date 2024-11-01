@@ -11,10 +11,19 @@ require "argon2id/version"
 require "argon2id/password"
 
 module Argon2id
+  # The default "time cost" of 2 iterations recommended by OWASP.
   DEFAULT_T_COST = 2
+
+  # The default "memory cost" of 19 mebibytes recommended by OWASP.
   DEFAULT_M_COST = 19456
+
+  # The default 1 thread and compute lane recommended by OWASP.
   DEFAULT_PARALLELISM = 1
+
+  # The default salt length of 16 bytes.
   DEFAULT_SALT_LEN = 16
+
+  # The default desired hash length of 32 bytes.
   DEFAULT_OUTPUT_LEN = 32
 
   @t_cost = DEFAULT_T_COST
