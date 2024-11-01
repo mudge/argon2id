@@ -7,10 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.2] - 2024-11-01
 
+### Added
+
+- The original salt for an `Argon2id::Password` can now be retrieved with
+  `Argon2id::Password#salt`
+
+### Changed
+
+- Encoded hashes are now validated when initialising an `Argon2id::Password`,
+  raising an `ArgumentError` if they are invalid
+
+## [0.1.2] - 2024-11-01
+
 ### Fixed
 
-- Validate that the encoded hash passed to Argon2id::Password.new is a
-  null-terminated C string, raising an ArgumentError if it contains extra null
+- Validate that the encoded hash passed to `Argon2id::Password.new` is a
+  null-terminated C string, raising an `ArgumentError` if it contains extra null
   bytes
 
 ## [0.1.1] - 2024-11-01
@@ -32,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference C implementation of Argon2, the password-hashing function that won
   the Password Hashing Competition.
 
+[0.2.0]: https://github.com/mudge/argon2id/releases/tag/v0.2.0
 [0.1.2]: https://github.com/mudge/argon2id/releases/tag/v0.1.2
 [0.1.1]: https://github.com/mudge/argon2id/releases/tag/v0.1.1
 [0.1.0]: https://github.com/mudge/argon2id/releases/tag/v0.1.0
