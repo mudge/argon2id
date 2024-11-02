@@ -70,6 +70,9 @@ rb_argon2id_verify(VALUE module, VALUE encoded, VALUE pwd) {
   if (result == ARGON2_VERIFY_MISMATCH) {
     return Qfalse;
   }
+  if (result == ARGON2_DECODING_FAIL || result == ARGON2_DECODING_LENGTH_FAIL) {
+    rb_raise(rb_eArgError, "%s", argon2_error_message(result));
+  }
 
   rb_raise(cArgon2idError, "%s", argon2_error_message(result));
 }

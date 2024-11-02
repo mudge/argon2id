@@ -31,6 +31,17 @@ jobs:
           name: cruby-gem
           path: pkg/*.gem
 
+  test-jruby:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "jruby-9.4"
+          bundler-cache: true
+      - run: bundle exec rake test
+
+
   precompile-aarch64-linux:
     uses: ./.github/workflows/precompile-gem.yml
     with:

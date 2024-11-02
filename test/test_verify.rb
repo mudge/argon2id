@@ -19,7 +19,7 @@ class TestVerify < Minitest::Test
   end
 
   def test_raises_if_given_invalid_encoded
-    assert_raises(Argon2id::Error) do
+    assert_raises(ArgumentError) do
       Argon2id.verify("", "opensesame")
     end
   end
