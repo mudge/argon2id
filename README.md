@@ -1,7 +1,7 @@
 # Argon2id - Ruby bindings to the OWASP recommended password-hashing function
 
-Ruby bindings to the reference C implementation of [Argon2][], the password-hashing
-function that won the 2015 [Password Hashing Competition][].
+Ruby bindings to [Argon2][], the password-hashing function that won the 2015
+[Password Hashing Competition][].
 
 [![Build Status](https://github.com/mudge/argon2id/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/mudge/argon2id/actions)
 
@@ -177,7 +177,7 @@ This gem requires any of the following to run:
 > [!NOTE]
 > The JRuby version of the gem uses
 > [JRuby-OpenSSL](https://github.com/jruby/jruby-openssl)'s implementation of
-> Argon2 instead of the reference C implementation.
+> Argon2 while the others use the reference C implementation.
 
 ### Native gems
 

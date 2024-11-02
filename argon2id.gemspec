@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name = "argon2id"
   s.version = Argon2id::VERSION
   s.summary = "Ruby bindings to Argon2"
-  s.description = "Ruby bindings to the reference C implementation of Argon2, the password-hashing function that won the 2015 Password Hashing Competition."
+  s.description = "Ruby bindings to Argon2, the password-hashing function that won the 2015 Password Hashing Competition."
   s.license = "BSD-3-Clause"
   s.authors = ["Paul Mucur"]
   s.homepage = "https://github.com/mudge/argon2id"
