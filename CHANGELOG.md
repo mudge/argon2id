@@ -5,12 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2024-11-02
+
+### Changed
+
+- Refactor verification on JRuby to avoid parsing encoded hashes unnecessarily
+- No longer describe the gem in terms of bindings to the reference C
+  implementation given the Bouncy Castle-based JRuby implementation
+- Only wrap `IllegalStateException` with `Argon2id::Error` on JRuby
+
 ## [0.4.0] - 2024-11-02
 
 ### Added
 
 - Added support for JRuby 9.4 by adding an implementation of Argon2id hashing
-  and verification using JRuby-OpenSSL's Bouncy Castle internals.
+  and verification using JRuby-OpenSSL's Bouncy Castle internals
 - Added `output` to `Argon2id::Password` instances so the actual "output" part
   of a password hash can be retrieved (and compared)
 
@@ -77,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference C implementation of Argon2, the password-hashing function that won
   the Password Hashing Competition.
 
+[0.4.1]: https://github.com/mudge/argon2id/releases/tag/v0.4.1
 [0.4.0]: https://github.com/mudge/argon2id/releases/tag/v0.4.0
 [0.3.0]: https://github.com/mudge/argon2id/releases/tag/v0.3.0
 [0.2.1]: https://github.com/mudge/argon2id/releases/tag/v0.2.1

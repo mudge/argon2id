@@ -5,7 +5,7 @@ Ruby bindings to [Argon2][], the password-hashing function that won the 2015
 
 [![Build Status](https://github.com/mudge/argon2id/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/mudge/argon2id/actions)
 
-**Current version:** 0.4.0  
+**Current version:** 0.4.1  
 **Bundled Argon2 version:** libargon2.1 (20190702)
 
 ```ruby
@@ -127,7 +127,7 @@ password == "opensesame"    #=> true
 password == "notopensesame" #=> false
 ```
 
-Or, if you only have the hash (e.g. retrieved from storage):
+Or, if you only have the encoded hash (e.g. retrieved from storage):
 
 ```ruby
 password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$ZS2nBFWBpnt28HjtzNOW4w$SQ+p+dIcWbpzWpZQ/ZZFj8IQkyhYZf127U4QdkRmKFU")
@@ -143,7 +143,7 @@ password.is_password?("opensesame")    #=> true
 password.is_password?("notopensesame") #=> false
 ```
 
-The various parts of the encoded password can be retrieved:
+The various parts of the encoded hash can be retrieved:
 
 ```ruby
 password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
