@@ -166,9 +166,16 @@ Argon2id::Password.create("password", salt_len: 0)
 
 ## Requirements
 
-This gem requires the following to run:
+This gem requires any of the following to run:
 
 * [Ruby](https://www.ruby-lang.org/en/) 2.6 to 3.3
+* [JRuby](https://www.jruby.org) 9.4
+* [TruffleRuby](https://www.graalvm.org/ruby/) 24.1
+
+> [!NOTE]
+> The JRuby version of the gem uses
+> [JRuby-OpenSSL](https://github.com/jruby/jruby-openssl)'s implementation of
+> Argon2 instead of the reference C implementation.
 
 ### Native gems
 

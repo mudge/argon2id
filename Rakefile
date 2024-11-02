@@ -20,6 +20,13 @@ ENV["RUBY_CC_VERSION"] = %w[3.3.0 3.2.0 3.1.0 3.0.0 2.7.0 2.6.0].join(":")
 
 gemspec = Gem::Specification.load("argon2id.gemspec")
 
+if RUBY_PLATFORM == "java"
+  gemspec.files.reject! { |path| File.fnmatch?("ext/*", path) }
+  gemspec.extensions.clear
+  gemspec.platform = Gem::Platform.new("java")
+  gemspec.required_ruby_version = ">= 3.1.0"
+end
+
 Gem::PackageTask.new(gemspec).define
 
 Rake::ExtensionTask.new("argon2id", gemspec) do |e|
@@ -49,6 +56,15 @@ namespace :gem do
         bundle exec rake native:#{platform} pkg/#{gemspec.full_name}-#{Gem::Platform.new(platform)}.gem PATH="/usr/local/bin:$PATH"
       SCRIPT
     end
+  end
+
+  desc "Compile gem for JRuby"
+  task :jruby do
+    RakeCompilerDock.sh <<~SCRIPT, rubyvm: "jruby", platform: "jruby", verbose: true
+      gem install bundler --no-document &&
+      bundle &&
+      bundle exec rake gem
+    SCRIPT
   end
 end
 

@@ -44,7 +44,7 @@ module Argon2id
       \$
       ([a-zA-Z0-9+/]+)
       \$
-      [a-zA-Z0-9+/]+
+      ([a-zA-Z0-9+/]+)
       \z
     }x.freeze
 
@@ -68,6 +68,9 @@ module Argon2id
 
     # The salt.
     attr_reader :salt
+
+    # The hash output.
+    attr_reader :output
 
     # Create a new Password object that hashes a given plain text password +pwd+.
     #
@@ -101,8 +104,6 @@ module Argon2id
       )
     end
 
-    # call-seq: Argon2id::Password.new(encoded)
-    #
     # Create a new Password with the given encoded password hash.
     #
     #   password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$FI8yp1gXbthJCskBlpKPoQ$nOfCCpS2r+I8GRN71cZND4cskn7YKBNzuHUEO3YpY2s")
@@ -118,6 +119,7 @@ module Argon2id
       @t_cost = Integer($4)
       @parallelism = Integer($5)
       @salt = $6.unpack1("m")
+      @output = $7.unpack1("m")
     end
 
     # Return the encoded password hash.
