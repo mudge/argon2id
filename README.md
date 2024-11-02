@@ -5,7 +5,7 @@ function that won the 2015 [Password Hashing Competition][].
 
 [![Build Status](https://github.com/mudge/argon2id/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/mudge/argon2id/actions)
 
-**Current version:** 0.3.0  
+**Current version:** 0.4.0  
 **Bundled Argon2 version:** libargon2.1 (20190702)
 
 ```ruby
@@ -143,7 +143,7 @@ password.is_password?("opensesame")    #=> true
 password.is_password?("notopensesame") #=> false
 ```
 
-The various parameters for the password can be retrieved:
+The various parts of the encoded password can be retrieved:
 
 ```ruby
 password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
@@ -153,6 +153,8 @@ password.m_cost      #=> 256
 password.t_cost      #=> 2
 password.parallelism #=> 1
 password.salt        #=> "somesalt"
+password.output
+#=> "\x9D\xFE\xB9\x10\xE8\v\xAD\x03\x11\xFE\xE2\x0F\x9C\x0E+\x12\xC1y\x87\xB4\xCA\xC9\f.\xF5M[0!\xC6\x8B\xFE"
 ```
 
 ### Errors
@@ -187,6 +189,7 @@ Where possible, a pre-compiled native gem will be provided for the following pla
     * [musl](https://musl.libc.org/)-based systems such as [Alpine](https://alpinelinux.org) are supported as long as a [glibc-compatible library is installed](https://wiki.alpinelinux.org/wiki/Running_glibc_programs)
 * macOS `x86_64-darwin` and `arm64-darwin`
 * Windows `x64-mingw32` and `x64-mingw-ucrt`
+* Java: any platform running JRuby 9.4 or higher
 
 ### Verifying the gems
 
