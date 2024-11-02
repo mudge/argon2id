@@ -198,11 +198,11 @@ notes](https://github.com/mudge/argon2id/releases) for each version and can be
 checked with `sha256sum`, e.g.
 
 ```console
-$ gem fetch argon2id -v 0.4.0
-Fetching argon2id-0.4.0-arm64-darwin.gem
-Downloaded argon2id-0.4.0-arm64-darwin
-$ sha256sum argon2id-0.4.0-arm64-darwin.gem
-2cecd6d5a1ecaf0a025e95714c0dee22dfc3d4585b649c57c06f432031b55a77  argon2id-0.4.0-arm64-darwin.gem
+$ gem fetch argon2id -v 0.4.1
+Fetching argon2id-0.4.1-arm64-darwin.gem
+Downloaded argon2id-0.4.1-arm64-darwin
+$ sha256sum argon2id-0.4.1-arm64-darwin.gem
+c74c06c2c4ce70d6c3822f05d83bab4ea431dd16ec086c9c856da3c6e0d9bbe9  argon2id-0.4.1-arm64-darwin.gem
 ```
 
 [GPG](https://www.gnupg.org/) signatures are attached to each release (the
@@ -212,8 +212,8 @@ from a public keyserver, e.g. `gpg --keyserver keyserver.ubuntu.com --recv-key
 0x39AC3530070E0F75`):
 
 ```console
-$ gpg --verify argon2id-0.4.0-arm64-darwin.gem.sig argon2id-0.4.0-arm64-darwin.gem
-gpg: Signature made Sat  2 Nov 15:25:15 2024 GMT
+$ gpg --verify argon2id-0.4.1-arm64-darwin.gem.sig argon2id-0.4.1-arm64-darwin.gem
+gpg: Signature made Sat  2 Nov 20:50:54 2024 GMT
 gpg:                using RSA key 702609D9C790F45B577D7BEC39AC3530070E0F75
 gpg: Good signature from "Paul Mucur <mudge@mudge.name>" [unknown]
 gpg:                 aka "Paul Mucur <paul@ghostcassette.com>" [unknown]
