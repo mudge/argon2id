@@ -169,4 +169,10 @@ class TestPassword < Minitest::Test
 
     assert_equal 1, password.parallelism
   end
+
+  def test_extracting_output_from_hash
+    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
+
+    assert_equal "\x9D\xFE\xB9\x10\xE8\v\xAD\x03\x11\xFE\xE2\x0F\x9C\x0E+\x12\xC1y\x87\xB4\xCA\xC9\f.\xF5M[0!\xC6\x8B\xFE".b, password.output
+  end
 end

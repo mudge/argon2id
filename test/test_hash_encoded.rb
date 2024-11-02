@@ -10,6 +10,12 @@ class TestHashEncoded < Minitest::Test
     assert_equal "$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4", encoded
   end
 
+  def test_password_with_parallelism_of_two
+    encoded = Argon2id.hash_encoded(2, 256, 2, "password", "somesalt", 32)
+
+    assert_equal "$argon2id$v=19$m=256,t=2,p=2$c29tZXNhbHQ$bQk8UB/VmZZF4Oo79iDXuL5/0ttZwg2f/5U52iv1cDc", encoded
+  end
+
   def test_valid_password_does_not_include_trailing_null_byte
     encoded = Argon2id.hash_encoded(2, 256, 1, "password", "somesalt", 32)
 

@@ -57,7 +57,35 @@ module Argon2id
     Error = Class.new(StandardError)
 
     def self.hash_encoded(t_cost, m_cost, parallelism, pwd, salt, hashlen)
-      raise Error, "Salt is too short" unless String(salt).bytesize.positive?
+      output = hash_raw(t_cost, m_cost, parallelism, pwd, salt, hashlen)
+
+      encoder = Java::JavaUtil::Base64.get_encoder.without_padding
+      encoded_salt = encoder.encode_to_string(salt.to_java_bytes)
+      encoded_output = encoder.encode_to_string(output)
+
+      "$argon2id$v=19$m=#{Integer(m_cost)},t=#{Integer(t_cost)}," \
+        "p=#{Integer(parallelism)}$#{encoded_salt}$#{encoded_output}"
+    end
+
+    def self.verify(encoded, pwd)
+      password = Password.new(encoded)
+      other_raw = hash_raw(
+        password.t_cost,
+        password.m_cost,
+        password.parallelism,
+        String(pwd),
+        password.salt,
+        password.output.bytesize
+      )
+
+      Java::OrgBouncycastleUtil::Arrays.constant_time_are_equal(
+        password.output.to_java_bytes,
+        other_raw
+      )
+    end
+
+    def self.hash_raw(t_cost, m_cost, parallelism, pwd, salt, hashlen)
+      raise Error, "Salt is too short" if String(salt).empty?
 
       hash = Java::byte[Integer(hashlen)].new
       params = Java::OrgBouncycastleCryptoParams::Argon2Parameters::Builder
@@ -68,38 +96,13 @@ module Argon2id
         .with_iterations(Integer(t_cost))
         .build
       generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
-      encoder = Java::JavaUtil::Base64.get_encoder.without_padding
 
       generator.init(params)
       generator.generate_bytes(String(pwd).to_java_bytes, hash)
 
-      encoded_salt = encoder.encode_to_string(params.get_salt)
-      encoded_output = encoder.encode_to_string(hash)
-
-      "$argon2id$v=#{params.get_version}$m=#{params.get_memory}," \
-        "t=#{params.get_iterations},p=#{params.get_lanes}" \
-        "$#{encoded_salt}$#{encoded_output}"
-    rescue => e
+      hash
+    rescue Java::JavaLang::IllegalStateException => e
       raise Error, e.message
-    end
-
-    def self.verify(encoded, pwd)
-      password = Password.new(encoded)
-      other_password = Password.new(
-        hash_encoded(
-          password.t_cost,
-          password.m_cost,
-          password.parallelism,
-          String(pwd),
-          password.salt,
-          password.output.bytesize
-        )
-      )
-
-      Java::OrgBouncycastleUtil::Arrays.constant_time_are_equal(
-        password.output.to_java_bytes,
-        other_password.output.to_java_bytes
-      )
     end
   end
 end
