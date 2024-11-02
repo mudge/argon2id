@@ -98,6 +98,12 @@ class TestPassword < Minitest::Test
     end
   end
 
+  def test_raises_for_non_argon2id_hashes
+    assert_raises(ArgumentError) do
+      Argon2id::Password.new("$argon2i$v=19$m=256,t=2,p=1$c29tZXNhbHQ$iekCn0Y3spW+sCcFanM2xBT63UP2sghkUoHLIUpWRS8")
+    end
+  end
+
   def test_salt_supports_versionless_hashes
     password = Argon2id::Password.new("$argon2id$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
 
@@ -108,18 +114,6 @@ class TestPassword < Minitest::Test
     password = Argon2id::Password.create("password")
 
     assert Argon2id::Password.new(password) == "password"
-  end
-
-  def test_extracting_type_from_hash
-    password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
-
-    assert_equal "argon2id", password.type
-  end
-
-  def test_extracting_type_from_argoni_hash
-    password = Argon2id::Password.new("$argon2i$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
-
-    assert_equal "argon2i", password.type
   end
 
   def test_extracting_version_from_hash

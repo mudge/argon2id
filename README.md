@@ -135,6 +135,10 @@ password == "opensesame"    #=> true
 password == "notopensesame" #=> false
 ```
 
+> [!WARNING]
+> `Argon2id::Password.new` does not support hashes generated from other Argon2
+> variants such as Argon2i and Argon2d.
+
 For compatibility with [bcrypt-ruby][], `Argon2id::Password#==` is aliased to `Argon2id::Password.is_password?`:
 
 ```ruby
@@ -147,7 +151,6 @@ The various parts of the encoded hash can be retrieved:
 
 ```ruby
 password = Argon2id::Password.new("$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4")
-password.type        #=> "argon2id"
 password.version     #=> 19
 password.m_cost      #=> 256
 password.t_cost      #=> 2

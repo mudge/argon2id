@@ -25,7 +25,6 @@ module Argon2id
   #
   # You can read various parameters out of a password hash:
   #
-  #   password.type        #=> "argon2id"
   #   password.version     #=> 19
   #   password.m_cost      #=> 19456
   #   password.t_cost      #=> 2
@@ -36,7 +35,7 @@ module Argon2id
     PATTERN = %r{
       \A
       \$
-      (argon2(?:id|i|d))
+      argon2id
       (?:\$v=(\d+))?
       \$m=(\d+)
       ,t=(\d+)
@@ -50,9 +49,6 @@ module Argon2id
 
     # The encoded password hash.
     attr_reader :encoded
-
-    # The type of the hashing function.
-    attr_reader :type
 
     # The version number of the hashing function.
     attr_reader :version
@@ -113,13 +109,12 @@ module Argon2id
       raise ArgumentError, "invalid hash" unless PATTERN =~ String(encoded)
 
       @encoded = $&
-      @type = $1
-      @version = Integer($2 || 0x10)
-      @m_cost = Integer($3)
-      @t_cost = Integer($4)
-      @parallelism = Integer($5)
-      @salt = $6.unpack1("m")
-      @output = $7.unpack1("m")
+      @version = Integer($1 || 0x10)
+      @m_cost = Integer($2)
+      @t_cost = Integer($3)
+      @parallelism = Integer($4)
+      @salt = $5.unpack1("m")
+      @output = $6.unpack1("m")
     end
 
     # Return the encoded password hash.
