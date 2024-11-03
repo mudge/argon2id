@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 if RUBY_PLATFORM == "java"
+  require "java"
   require "openssl"
 else
   begin
@@ -56,15 +57,32 @@ module Argon2id
   if RUBY_PLATFORM == "java"
     Error = Class.new(StandardError)
 
+    java_import "org.bouncycastle.util.Arrays"
+    java_import "org.bouncycastle.crypto.params.Argon2Parameters"
+    java_import "org.bouncycastle.crypto.generators.Argon2BytesGenerator"
+
+    # Provide signature-specific aliases for overloaded methods to improve
+    # performance, see
+    # https://github.com/jruby/jruby/wiki/ImprovingJavaIntegrationPerformance
+    class Arrays
+      java_alias :constant_time_byte_arrays_are_equal?, :constantTimeAreEqual, [Java::byte[], Java::byte[]]
+    end
+
+    class Argon2BytesGenerator
+      java_alias :generate_byte_array, :generateBytes, [Java::byte[], Java::byte[]]
+    end
+
     def self.hash_encoded(t_cost, m_cost, parallelism, pwd, salt, hashlen)
-      output = hash_raw(t_cost, m_cost, parallelism, pwd, salt, hashlen)
+      salt_bytes = salt.to_java_bytes
+      pwd_bytes = pwd.to_java_bytes
+      output = hash_raw(t_cost, m_cost, parallelism, pwd_bytes, salt_bytes, hashlen)
 
-      encoder = Java::JavaUtil::Base64.get_encoder.without_padding
-      encoded_salt = encoder.encode_to_string(salt.to_java_bytes)
-      encoded_output = encoder.encode_to_string(output)
+      encoder = Java::JavaUtil::Base64.getEncoder.withoutPadding
+      encoded_salt = encoder.encodeToString(salt_bytes)
+      encoded_output = encoder.encodeToString(output)
 
-      "$argon2id$v=19$m=#{Integer(m_cost)},t=#{Integer(t_cost)}," \
-        "p=#{Integer(parallelism)}$#{encoded_salt}$#{encoded_output}"
+      "$argon2id$v=19$m=#{m_cost},t=#{t_cost},p=#{parallelism}" \
+        "$#{encoded_salt}$#{encoded_output}"
     end
 
     def self.verify(encoded, pwd)
@@ -73,32 +91,32 @@ module Argon2id
         password.t_cost,
         password.m_cost,
         password.parallelism,
-        String(pwd),
-        password.salt,
+        pwd.to_java_bytes,
+        password.salt.to_java_bytes,
         password.output.bytesize
       )
 
-      Java::OrgBouncycastleUtil::Arrays.constant_time_are_equal(
+      Arrays.constant_time_byte_arrays_are_equal?(
         password.output.to_java_bytes,
         other_raw
       )
     end
 
     def self.hash_raw(t_cost, m_cost, parallelism, pwd, salt, hashlen)
-      raise Error, "Salt is too short" if String(salt).empty?
+      raise Error, "Salt is too short" if salt.empty?
 
-      hash = Java::byte[Integer(hashlen)].new
-      params = Java::OrgBouncycastleCryptoParams::Argon2Parameters::Builder
-        .new(Java::OrgBouncycastleCryptoParams::Argon2Parameters::ARGON2_id)
-        .with_salt(String(salt).to_java_bytes)
-        .with_parallelism(Integer(parallelism))
-        .with_memory_as_kb(Integer(m_cost))
-        .with_iterations(Integer(t_cost))
+      hash = Java::byte[hashlen].new
+      params = Argon2Parameters::Builder
+        .new(Argon2Parameters::ARGON2_id)
+        .withSalt(salt)
+        .withParallelism(parallelism)
+        .withMemoryAsKB(m_cost)
+        .withIterations(t_cost)
         .build
-      generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
+      generator = Argon2BytesGenerator.new
 
       generator.init(params)
-      generator.generate_bytes(String(pwd).to_java_bytes, hash)
+      generator.generate_byte_array(pwd, hash)
 
       hash
     rescue Java::JavaLang::IllegalStateException => e
