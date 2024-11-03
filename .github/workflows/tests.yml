@@ -31,6 +31,20 @@ jobs:
           name: cruby-gem
           path: pkg/*.gem
 
+  build-jruby-gem:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - run: bundle exec rake java:gem
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jruby-gem
+          path: pkg/*.gem
+
   precompile-aarch64-linux:
     uses: ./.github/workflows/precompile-gem.yml
     with:
@@ -75,11 +89,6 @@ jobs:
     uses: ./.github/workflows/precompile-gem.yml
     with:
       platform: x86-mingw32
-
-  precompile-jruby:
-    uses: ./.github/workflows/precompile-gem.yml
-    with:
-      platform: jruby
 
   test-ubuntu:
     needs: "build-cruby-gem"
@@ -314,8 +323,8 @@ jobs:
         env:
           BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
 
-  test-precompiled-jruby:
-    needs: "precompile-jruby"
+  test-jruby:
+    needs: "build-jruby-gem"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -325,7 +334,7 @@ jobs:
           bundler-cache: true
       - uses: actions/download-artifact@v4
         with:
-          name: cruby-jruby-gem
+          name: jruby-gem
           path: pkg
       - run: ./scripts/test-gem-install
         env:
