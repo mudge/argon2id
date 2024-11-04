@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "java" if RUBY_PLATFORM == "java"
 require "openssl"
 
 module Argon2id
@@ -89,7 +90,7 @@ module Argon2id
     #   #=> "$argon2id$v=19$m=12288,t=3,p=1$JigW7fFn+N3NImt+aWpuzw$eM5F1cKeIBALNTU6LuWra75Zi2nymGvQLWzJzVFv0Nc"
     def self.create(pwd, t_cost: Argon2id.t_cost, m_cost: Argon2id.m_cost, parallelism: Argon2id.parallelism, salt_len: Argon2id.salt_len, output_len: Argon2id.output_len)
       new(
-        Argon2id.hash_encoded(
+        hash_encoded(
           Integer(t_cost),
           Integer(m_cost),
           Integer(parallelism),
@@ -99,6 +100,37 @@ module Argon2id
         )
       )
     end
+
+    if RUBY_PLATFORM == "java"
+      def self.hash_encoded(t_cost, m_cost, parallelism, pwd, salt, hashlen)
+        raise Error, "Salt is too short" if salt.empty?
+
+        salt_bytes = salt.to_java_bytes
+        output = Java::byte[hashlen].new
+        params = Java::OrgBouncycastleCryptoParams::Argon2Parameters::Builder
+          .new(Java::OrgBouncycastleCryptoParams::Argon2Parameters::ARGON2_id)
+          .with_salt(salt_bytes)
+          .with_parallelism(parallelism)
+          .with_memory_as_kb(m_cost)
+          .with_iterations(t_cost)
+          .build
+        generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
+
+        generator.init(params)
+        generator.generate_bytes(pwd.to_java_bytes, output)
+
+        encoder = Java::JavaUtil::Base64.get_encoder.without_padding
+        encoded_salt = encoder.encode_to_string(salt_bytes)
+        encoded_output = encoder.encode_to_string(output)
+
+        "$argon2id$v=19$m=#{m_cost},t=#{t_cost},p=#{parallelism}" \
+          "$#{encoded_salt}$#{encoded_output}"
+      rescue Java::JavaLang::IllegalStateException => e
+        raise Error, e.message
+      end
+    end
+
+    private_class_method :hash_encoded
 
     # Create a new Password with the given encoded password hash.
     #
@@ -127,9 +159,32 @@ module Argon2id
     #   password == "password"    #=> true
     #   password == "notpassword" #=> false
     def ==(other)
-      Argon2id.verify(encoded, String(other))
+      verify(String(other))
     end
 
     alias_method :is_password?, :==
+
+    if RUBY_PLATFORM == "java"
+      def verify(pwd)
+        other_output = Java::byte[output.bytesize].new
+        params = Java::OrgBouncycastleCryptoParams::Argon2Parameters::Builder
+          .new(Java::OrgBouncycastleCryptoParams::Argon2Parameters::ARGON2_id)
+          .with_salt(salt.to_java_bytes)
+          .with_parallelism(parallelism)
+          .with_memory_as_kb(m_cost)
+          .with_iterations(t_cost)
+          .build
+        generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
+        generator.init(params)
+        generator.generate_bytes(pwd.to_java_bytes, other_output)
+
+        Java::OrgBouncycastleUtil::Arrays.constant_time_are_equal?(
+          output.to_java_bytes,
+          other_output
+        )
+      end
+
+      private :verify
+    end
   end
 end
