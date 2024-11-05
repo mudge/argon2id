@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "argon2id/extension"
-require "argon2id/version"
 require "argon2id/password"
+require "argon2id/version"
 
 module Argon2id
   # The default "time cost" of 2 iterations recommended by OWASP.
