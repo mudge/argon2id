@@ -5,21 +5,11 @@
 
 #define UNUSED(x) (void)(x)
 
-VALUE mArgon2id, cArgon2idError;
+VALUE mArgon2id, cArgon2idError, cArgon2idPassword;
+ID id_encoded;
 
-/* call-seq: hash_encoded(t_cost, m_cost, parallelism, pwd, salt, output_len)
- *
- * Hashes a password with Argon2id, producing an encoded hash.
- *
- * - +t_cost+: number of iterations
- * - +m_cost+: sets memory usage to +m_cost+ kibibytes
- * - +parallelism+: number of threads and compute lanes
- * - +pwd+: the password
- * - +salt+: the salt
- * - +output_len+: desired length of the hash in bytes
- */
 static VALUE
-rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE threads, VALUE pwd, VALUE salt, VALUE hashlen)
+rb_argon2id_hash_encoded(VALUE klass, VALUE iterations, VALUE memory, VALUE threads, VALUE pwd, VALUE salt, VALUE hashlen)
 {
   uint32_t t_cost, m_cost, parallelism;
   size_t encodedlen, outlen;
@@ -27,7 +17,7 @@ rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE thr
   int result;
   VALUE hash;
 
-  UNUSED(module);
+  UNUSED(klass);
 
   t_cost = FIX2INT(iterations);
   m_cost = FIX2INT(memory);
@@ -53,16 +43,12 @@ rb_argon2id_hash_encoded(VALUE module, VALUE iterations, VALUE memory, VALUE thr
   return hash;
 }
 
-/* call-seq: verify(encoded, pwd)
- *
- * Verifies a password against an encoded string.
- */
 static VALUE
-rb_argon2id_verify(VALUE module, VALUE encoded, VALUE pwd) {
+rb_argon2id_verify(VALUE self, VALUE pwd) {
   int result;
+  VALUE encoded;
 
-  UNUSED(module);
-
+  encoded = rb_ivar_get(self, id_encoded);
   result = argon2id_verify(StringValueCStr(encoded), StringValuePtr(pwd), RSTRING_LEN(pwd));
   if (result == ARGON2_OK) {
     return Qtrue;
@@ -80,8 +66,11 @@ rb_argon2id_verify(VALUE module, VALUE encoded, VALUE pwd) {
 void
 Init_argon2id(void)
 {
+  id_encoded = rb_intern("@encoded");
+
   mArgon2id = rb_define_module("Argon2id");
   cArgon2idError = rb_define_class_under(mArgon2id, "Error", rb_eStandardError);
-  rb_define_singleton_method(mArgon2id, "hash_encoded", rb_argon2id_hash_encoded, 6);
-  rb_define_singleton_method(mArgon2id, "verify", rb_argon2id_verify, 2);
+  cArgon2idPassword = rb_define_class_under(mArgon2id, "Password", rb_cObject);
+  rb_define_private_method(rb_singleton_class(cArgon2idPassword), "hash_encoded", rb_argon2id_hash_encoded, 6);
+  rb_define_private_method(cArgon2idPassword, "verify", rb_argon2id_verify, 1);
 }

@@ -89,7 +89,7 @@ module Argon2id
     #   #=> "$argon2id$v=19$m=12288,t=3,p=1$JigW7fFn+N3NImt+aWpuzw$eM5F1cKeIBALNTU6LuWra75Zi2nymGvQLWzJzVFv0Nc"
     def self.create(pwd, t_cost: Argon2id.t_cost, m_cost: Argon2id.m_cost, parallelism: Argon2id.parallelism, salt_len: Argon2id.salt_len, output_len: Argon2id.output_len)
       new(
-        Argon2id.hash_encoded(
+        hash_encoded(
           Integer(t_cost),
           Integer(m_cost),
           Integer(parallelism),
@@ -127,7 +127,7 @@ module Argon2id
     #   password == "password"    #=> true
     #   password == "notpassword" #=> false
     def ==(other)
-      Argon2id.verify(encoded, String(other))
+      verify(String(other))
     end
 
     alias_method :is_password?, :==

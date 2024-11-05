@@ -14,4 +14,4 @@ $CPPFLAGS << " " << "-I$(srcdir)/libargon2"
 have_header("stdint.h")
 have_header("argon2.h")
 
-create_makefile "argon2id"
+create_makefile "argon2id/argon2id"
