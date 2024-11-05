@@ -1,20 +1,10 @@
 # frozen_string_literal: true
 
-if RUBY_PLATFORM != "java"
-  begin
-    ::RUBY_VERSION =~ /(\d+\.\d+)/
-    require_relative "#{Regexp.last_match(1)}/argon2id.so"
-  rescue LoadError
-    require "argon2id.so"
-  end
-end
-
+require "argon2id/extension"
 require "argon2id/version"
 require "argon2id/password"
 
 module Argon2id
-  Error = Class.new(StandardError) if RUBY_PLATFORM == "java"
-
   # The default "time cost" of 2 iterations recommended by OWASP.
   DEFAULT_T_COST = 2
 

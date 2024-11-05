@@ -71,6 +71,6 @@ Init_argon2id(void)
   mArgon2id = rb_define_module("Argon2id");
   cArgon2idError = rb_define_class_under(mArgon2id, "Error", rb_eStandardError);
   cArgon2idPassword = rb_define_class_under(mArgon2id, "Password", rb_cObject);
-  rb_define_singleton_method(cArgon2idPassword, "hash_encoded", rb_argon2id_hash_encoded, 6);
+  rb_define_private_method(rb_singleton_class(cArgon2idPassword), "hash_encoded", rb_argon2id_hash_encoded, 6);
   rb_define_private_method(cArgon2idPassword, "verify", rb_argon2id_verify, 1);
 }

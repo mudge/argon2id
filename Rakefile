@@ -33,6 +33,7 @@ namespace :java do
 end
 
 Rake::ExtensionTask.new("argon2id", gemspec) do |e|
+  e.lib_dir = "lib/argon2id"
   e.cross_compile = true
   e.cross_platform = cross_platforms
 end

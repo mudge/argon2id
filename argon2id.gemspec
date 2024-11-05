@@ -45,6 +45,7 @@ Gem::Specification.new do |s|
     "ext/argon2id/libargon2/thread.c",
     "ext/argon2id/libargon2/thread.h",
     "lib/argon2id.rb",
+    "lib/argon2id/extension.rb",
     "lib/argon2id/password.rb",
     "lib/argon2id/version.rb",
     "test/test_password.rb"
