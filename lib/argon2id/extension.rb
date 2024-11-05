@@ -35,6 +35,8 @@ if RUBY_PLATFORM == "java"
         raise Error, e.message
       end
 
+      private_class_method :hash_encoded
+
       private
 
       def verify(pwd)
@@ -65,4 +67,3 @@ else
     require "argon2id/argon2id"
   end
 end
-
