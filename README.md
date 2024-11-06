@@ -55,6 +55,8 @@ password.salt   #=> "e-\xA7\x04U\x81\xA6{v\xF0x\xED\xCC\xD3\x96\xE3"
 
 — [OWASP Password Storage Cheat Sheet][]
 
+See also [argon2-cffi's "Why 'just use bcrypt' Is Not the Best Answer (Anymore)"](https://argon2-cffi.readthedocs.io/en/23.1.0/argon2.html#why-just-use-bcrypt-is-not-the-best-answer-anymore).
+
 ## Usage
 
 Install argon2id as a dependency:
