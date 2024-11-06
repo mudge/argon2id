@@ -449,4 +449,30 @@ class TestPassword < Minitest::Test
   ensure
     Argon2id.output_len = Argon2id::DEFAULT_OUTPUT_LEN
   end
+
+  def test_create_password_equals_correct_password
+    password = Argon2id::Password.create("password")
+
+    assert password == "password"
+  end
+
+  def test_create_password_does_not_equal_incorrect_password
+    password = Argon2id::Password.create("password")
+
+    refute password == "differentpassword"
+  end
+
+  def test_hashing_password_verifies_correct_password
+    hash = Argon2id::Password.create("password").to_s
+    password = Argon2id::Password.new(hash)
+
+    assert password == "password"
+  end
+
+  def test_hashing_password_does_not_verify_incorrect_password
+    hash = Argon2id::Password.create("password").to_s
+    password = Argon2id::Password.new(hash)
+
+    refute password == "differentpassword"
+  end
 end
