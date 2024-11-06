@@ -48,7 +48,8 @@ Gem::Specification.new do |s|
     "lib/argon2id/extension.rb",
     "lib/argon2id/password.rb",
     "lib/argon2id/version.rb",
-    "test/test_password.rb"
+    "test/argon2id/test_password.rb",
+    "test/test_argon2id.rb"
   ]
   s.rdoc_options = ["--main", "README.md"]
 

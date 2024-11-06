@@ -86,6 +86,15 @@ class TestPassword < Minitest::Test
     assert password == "password"
   end
 
+  def test_new_with_non_argon2id_hash_raises_argument_error
+    assert_raises(ArgumentError) do
+      Argon2id::Password.new(
+        "$argon2i$m=65536,t=2,p=1$c29tZXNhbHQ" \
+        "$9sTbSlTio3Biev89thdrlKKiCaYsjjYVJxGAL3swxpQ"
+      )
+    end
+  end
+
   def test_new_with_invalid_hash_raises_argument_error
     assert_raises(ArgumentError) do
       Argon2id::Password.new("not a valid hash")
@@ -304,7 +313,37 @@ class TestPassword < Minitest::Test
   def test_create_password_returns_password
     password = Argon2id::Password.create("password")
 
-    assert password == "password"
+    assert_instance_of Argon2id::Password, password
+  end
+
+  def test_create_password_uses_default_t_cost
+    password = Argon2id::Password.create("password")
+
+    assert_equal 2, password.t_cost
+  end
+
+  def test_create_password_uses_default_m_cost
+    password = Argon2id::Password.create("password")
+
+    assert_equal 19_456, password.m_cost
+  end
+
+  def test_create_password_uses_default_parallelism
+    password = Argon2id::Password.create("password")
+
+    assert_equal 1, password.parallelism
+  end
+
+  def test_create_password_uses_default_salt_len
+    password = Argon2id::Password.create("password")
+
+    assert_equal 16, password.salt.bytesize
+  end
+
+  def test_create_password_uses_default_output_len
+    password = Argon2id::Password.create("password")
+
+    assert_equal 32, password.output.bytesize
   end
 
   def test_create_password_with_t_cost_changes_t_cost
@@ -350,7 +389,7 @@ class TestPassword < Minitest::Test
   end
 
   def test_create_password_with_output_len_changes_output_len
-    password = Argon2id::Password.create("password", output_len: 8, m_cost: 8)
+    password = Argon2id::Password.create("password", output_len: 8)
 
     assert_equal 8, password.output.bytesize
   end
