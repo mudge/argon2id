@@ -149,6 +149,18 @@ password.is_password?("opensesame")    #=> true
 password.is_password?("notopensesame") #=> false
 ```
 
+> [!CAUTION]
+> `Argon2id::Password#==` only works if the plain text password is on the right, e.g. the following behaviour may be surprising:
+>
+> ```ruby
+> password = Argon2id::Password.create("password")
+> password == "password" #=> true
+> "password" == password #=> false
+> password == password   #=> false
+> ```
+>
+> If you want to avoid this ambiguity, prefer the `Argon2id::Password#is_password?` alias instead.
+
 The various parts of the encoded hash can be retrieved:
 
 ```ruby
