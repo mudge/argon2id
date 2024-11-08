@@ -27,8 +27,8 @@ password.salt   #=> "e-\xA7\x04U\x81\xA6{v\xF0x\xED\xCC\xD3\x96\xE3"
     * [Hashing passwords](#hashing-passwords)
     * [Verifying passwords](#verifying-passwords)
     * [Validating encoded hashes](#validating-encoded-hashes)
-    * [Usage with Active Record](#usage-with-active-record)
     * [Errors](#errors)
+    * [Usage with Active Record](#usage-with-active-record)
 * [Requirements](#requirements)
     * [Native gems](#native-gems)
     * [Verifying the gems](#verifying-the-gems)
@@ -188,6 +188,15 @@ Argon2id::Password.valid_hash?("$2a$12$stsRn7Mi9r02.keRyF4OK.Aq4UWOU185lWggfUQfc
 #=> false
 ```
 
+### Errors
+
+Any errors returned from Argon2 will be raised as `Argon2id::Error`, e.g.
+
+```ruby
+Argon2id::Password.create("password", salt_len: 0)
+# Salt is too short (Argon2id::Error)
+```
+
 ### Usage with Active Record
 
 If you're planning to use this with Active Record instead of [Rails' own
@@ -242,15 +251,6 @@ user.authenticate("password") #=> user
 
 User.find_by(name: "alice")&.authenticate("notright") #=> false
 User.find_by(name: "alice")&.authenticate("password") #=> user
-```
-
-### Errors
-
-Any errors returned from Argon2 will be raised as `Argon2id::Error`, e.g.
-
-```ruby
-Argon2id::Password.create("password", salt_len: 0)
-# Salt is too short (Argon2id::Error)
 ```
 
 ## Requirements
