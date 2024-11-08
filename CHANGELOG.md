@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2024-11-08
+
+### Fixed
+
+- Fixed verifying Argon2id encoded hashes without a version number on JRuby
+
+### Added
+
+- Added a new `Argon2id::Password.valid_hash?` API for testing if a given
+  encoded hash is a valid Argon2id hash or not (e.g. if you want to check
+  which hashing function was used to store a user's password)
+
 ## [0.6.0] - 2024-11-05
 
 ### Changed
@@ -99,6 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference C implementation of Argon2, the password-hashing function that won
   the Password Hashing Competition.
 
+[0.7.0]: https://github.com/mudge/argon2id/releases/tag/v0.7.0
 [0.6.0]: https://github.com/mudge/argon2id/releases/tag/v0.6.0
 [0.5.0]: https://github.com/mudge/argon2id/releases/tag/v0.5.0
 [0.4.1]: https://github.com/mudge/argon2id/releases/tag/v0.4.1
