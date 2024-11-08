@@ -104,7 +104,7 @@ module Argon2id
     #
     # Returns true if so and false if not.
     def self.valid_hash?(encoded)
-      PATTERN.match?(encoded)
+      PATTERN.match?(String(encoded))
     end
 
     # Create a new Password with the given encoded password hash.

@@ -54,6 +54,27 @@ class TestPassword < Minitest::Test
     )
   end
 
+  def test_valid_hash_with_nil_returns_false
+    refute Argon2id::Password.valid_hash?(nil)
+  end
+
+  def test_valid_hash_with_coercible_argon2id_hash_returns_true
+    assert Argon2id::Password.valid_hash?(
+      StringLike.new(
+        "$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ" \
+        "$CTFhFdXPJO1aFaMaO6Mm5c8y7cJHAph8ArZWb2GRPPc"
+      )
+    )
+  end
+
+  def test_valid_hash_with_coercible_bcrypt_hash_returns_false
+    refute Argon2id::Password.valid_hash?(
+      StringLike.new(
+        "$2a$12$stsRn7Mi9r02.keRyF4OK.Aq4UWOU185lWggfUQfcupAi.b7AI/nS"
+      )
+    )
+  end
+
   def test_new_m_65536_t_2_p_1_equals_password
     password = Argon2id::Password.new(
       "$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ" \
