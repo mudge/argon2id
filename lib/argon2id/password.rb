@@ -100,6 +100,13 @@ module Argon2id
       )
     end
 
+    # Check an encoded hash is a valid Argon2id hash.
+    #
+    # Returns true if so and false if not.
+    def self.valid_hash?(encoded)
+      PATTERN.match?(encoded)
+    end
+
     # Create a new Password with the given encoded password hash.
     #
     #   password = Argon2id::Password.new("$argon2id$v=19$m=19456,t=2,p=1$FI8yp1gXbthJCskBlpKPoQ$nOfCCpS2r+I8GRN71cZND4cskn7YKBNzuHUEO3YpY2s")

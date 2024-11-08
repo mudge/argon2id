@@ -26,6 +26,7 @@ password.salt   #=> "e-\xA7\x04U\x81\xA6{v\xF0x\xED\xCC\xD3\x96\xE3"
 * [Usage](#usage)
     * [Hashing passwords](#hashing-passwords)
     * [Verifying passwords](#verifying-passwords)
+    * [Validating encoded hashes](#validating-encoded-hashes)
     * [Errors](#errors)
 * [Requirements](#requirements)
     * [Native gems](#native-gems)
@@ -172,6 +173,18 @@ password.parallelism #=> 1
 password.salt        #=> "somesalt"
 password.output
 #=> "\x9D\xFE\xB9\x10\xE8\v\xAD\x03\x11\xFE\xE2\x0F\x9C\x0E+\x12\xC1y\x87\xB4\xCA\xC9\f.\xF5M[0!\xC6\x8B\xFE"
+```
+
+### Validating encoded hashes
+
+If you need to check ahead of time whether an encoded password hash is a valid Argon2id hash (e.g. if you're migrating between hashing functions and need to test what kind of password has been stored for a user), you can use `Argon2id::Password.valid_hash?` like so:
+
+```ruby
+Argon2id::Password.valid_hash?("$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$CTFhFdXPJO1aFaMaO6Mm5c8y7cJHAph8ArZWb2GRPPc")
+#=> true
+
+Argon2id::Password.valid_hash?("$2a$12$stsRn7Mi9r02.keRyF4OK.Aq4UWOU185lWggfUQfcupAi.b7AI/nS")
+#=> false
 ```
 
 ### Errors
