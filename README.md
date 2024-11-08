@@ -27,6 +27,7 @@ password.salt   #=> "e-\xA7\x04U\x81\xA6{v\xF0x\xED\xCC\xD3\x96\xE3"
     * [Hashing passwords](#hashing-passwords)
     * [Verifying passwords](#verifying-passwords)
     * [Validating encoded hashes](#validating-encoded-hashes)
+    * [Usage with Active Record](#usage-with-active-record)
     * [Errors](#errors)
 * [Requirements](#requirements)
     * [Native gems](#native-gems)
@@ -185,6 +186,62 @@ Argon2id::Password.valid_hash?("$argon2id$v=19$m=65536,t=2,p=1$c29tZXNhbHQ$CTFhF
 
 Argon2id::Password.valid_hash?("$2a$12$stsRn7Mi9r02.keRyF4OK.Aq4UWOU185lWggfUQfcupAi.b7AI/nS")
 #=> false
+```
+
+### Usage with Active Record
+
+If you're planning to use this with Active Record instead of [Rails' own
+bcrypt-based
+`has_secure_password`](https://api.rubyonrails.org/v8.0/classes/ActiveModel/SecurePassword/ClassMethods.html),
+you can use the following as a starting point:
+
+#### The `User` model
+
+```ruby
+require "argon2id"
+
+# Schema: User(name: string, password_digest:string)
+class User < ApplicationRecord
+  attr_reader :password
+
+  validates :password_digest, presence: true
+  validates :password, confirmation: true, allow_blank: true
+
+  def password=(unencrypted_password)
+    if unencrypted_password.nil?
+      @password = nil
+      self.password_digest = nil
+    elsif !unencrypted_password.empty?
+      @password = unencrypted_password
+      self.password_digest = Argon2id::Password.create(unencrypted_password)
+    end
+  end
+
+  def authenticate(unencrypted_password)
+    password_digest? && Argon2id::Password.new(password_digest).is_password?(unencrypted_password) && self
+  end
+
+  def password_salt
+    Argon2id::Password.new(password_digest).salt if password_digest?
+  end
+end
+```
+
+This can then be used like so:
+
+```ruby
+user = User.new(name: "alice", password: "", password_confirmation: "diffpassword")
+user.save                               #=> false, password required
+user.password = "password"
+user.save                               #=> false, confirmation doesn't match
+user.password_confirmation = "password"
+user.save                               #=> true
+
+user.authenticate("notright") #=> false
+user.authenticate("password") #=> user
+
+User.find_by(name: "alice")&.authenticate("notright") #=> false
+User.find_by(name: "alice")&.authenticate("password") #=> user
 ```
 
 ### Errors
