@@ -86,6 +86,15 @@ class TestPassword < Minitest::Test
     assert password == "password"
   end
 
+  def test_new_with_versionless_hash_equals_password
+    password = Argon2id::Password.new(
+      "$argon2id$m=256,t=2,p=1$c29tZXNhbHQ" \
+      "$2gcOV25Q8vOKPIl8vdxsf7QCjocJcf+erntOGHkpXm4"
+    )
+
+    assert password == "password"
+  end
+
   def test_new_with_non_argon2id_hash_raises_argument_error
     assert_raises(ArgumentError) do
       Argon2id::Password.new(

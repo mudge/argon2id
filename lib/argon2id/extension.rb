@@ -47,6 +47,7 @@ if RUBY_PLATFORM == "java"
           .with_parallelism(parallelism)
           .with_memory_as_kb(m_cost)
           .with_iterations(t_cost)
+          .with_version(version)
           .build
         generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
         generator.init(params)
