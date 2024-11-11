@@ -15,10 +15,11 @@ if RUBY_PLATFORM == "java"
         output = Java::byte[hashlen].new
         params = Java::OrgBouncycastleCryptoParams::Argon2Parameters::Builder
           .new(Java::OrgBouncycastleCryptoParams::Argon2Parameters::ARGON2_id)
-          .with_salt(salt_bytes)
-          .with_parallelism(parallelism)
-          .with_memory_as_kb(m_cost)
+          .with_version(Java::OrgBouncycastleCryptoParams::Argon2Parameters::ARGON2_VERSION_13)
           .with_iterations(t_cost)
+          .with_memory_as_kb(m_cost)
+          .with_parallelism(parallelism)
+          .with_salt(salt_bytes)
           .build
         generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
 
@@ -43,11 +44,11 @@ if RUBY_PLATFORM == "java"
         other_output = Java::byte[output.bytesize].new
         params = Java::OrgBouncycastleCryptoParams::Argon2Parameters::Builder
           .new(Java::OrgBouncycastleCryptoParams::Argon2Parameters::ARGON2_id)
-          .with_salt(salt.to_java_bytes)
-          .with_parallelism(parallelism)
-          .with_memory_as_kb(m_cost)
-          .with_iterations(t_cost)
           .with_version(version)
+          .with_iterations(t_cost)
+          .with_memory_as_kb(m_cost)
+          .with_parallelism(parallelism)
+          .with_salt(salt.to_java_bytes)
           .build
         generator = Java::OrgBouncycastleCryptoGenerators::Argon2BytesGenerator.new
         generator.init(params)

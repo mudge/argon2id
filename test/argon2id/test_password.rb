@@ -386,6 +386,12 @@ class TestPassword < Minitest::Test
     assert_instance_of Argon2id::Password, password
   end
 
+  def test_create_password_uses_version_13
+    password = Argon2id::Password.create("password")
+
+    assert_equal 0x13, password.version
+  end
+
   def test_create_password_uses_default_t_cost
     password = Argon2id::Password.create("password")
 
