@@ -110,6 +110,35 @@ password.to_s
 #=> "$argon2id$v=19$m=12288,t=3,p=1$uukIsLS6y6etvsgoN20kVg$exMvDX/P9exvEPmnZL2gZClRyMdrnqjqyysLMP/VUWA"
 ```
 
+For convenience, several sets of parameters are available as constants:
+
+1.  The first recommended option from [RFC
+    9106](https://datatracker.ietf.org/doc/rfc9106/):
+
+    ```ruby
+    password = Argon2id::Password.create("opensesame", **Argon2id::RFC_9106_HIGH_MEMORY)
+    password.to_s
+    #=> "$argon2id$v=19$m=2097152,t=1,p=4$6mZF5heTzNrztem0+ICjpg$ftqgeGJ0Hfsqymu1aeb4cXL11pjgbcIuIjYwFJOOUVM"
+    ```
+
+2.  The second recommended option from RFC 9106:
+
+    ```ruby
+    password = Argon2id::Password.create("opensesame", **Argon2id::RFC_9106_LOW_MEMORY)
+    password.to_s
+    #=> "$argon2id$v=19$m=65536,t=3,p=4$RSoUjYKa5Xg8zoPtv/LJgQ$wKGeEUJXaoG4yRCX5SyINyKWO1a78IL6nVToraNwwqY"
+    ```
+
+3.  The second recommended option from the [OWASP Password Storage Cheat
+    Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#argon2id)
+    (this is the default if no keyword arguments are passed):
+
+    ```ruby
+    password = Argon2id::Password.create("opensesame", **Argon2id::OWASP_2)
+    password.to_s
+    #=> "$argon2id$v=19$m=19456,t=2,p=1$CG+LJTSf0ghYGvPtUYdyqA$cynug5xL6dRN4YOrG4MCzc/3EWkJxwg+D0gZkoyPeH8"
+    ```
+
 If you want to override the parameters for all calls to
 `Argon2id::Password.create`, you can set them on `Argon2id` directly:
 
@@ -119,6 +148,14 @@ Argon2id.m_cost = 12288
 Argon2id.parallelism = 1
 Argon2id.salt_len = 16
 Argon2id.output_len = 32
+```
+
+To set multiple parameters at once or use one of the constants, you can use
+`Argon2id.set_defaults`:
+
+```ruby
+Argon2id.set_defaults(t_cost: 3, m_cost: 12288)
+Argon2id.set_defaults(**Argon2id::RFC_9106_HIGH_MEMORY)
 ```
 
 ### Verifying passwords
