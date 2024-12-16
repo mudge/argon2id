@@ -100,22 +100,12 @@ jobs:
     with:
       platform: x64-mingw-ucrt
 
-  precompile-x64-mingw32:
-    uses: ./.github/workflows/precompile-gem.yml
-    with:
-      platform: x64-mingw32
-
-  precompile-x86-mingw32:
-    uses: ./.github/workflows/precompile-gem.yml
-    with:
-      platform: x86-mingw32
-
   test-ubuntu:
     needs: "build-cruby-gem"
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4.0-rc1", "truffleruby"]
+        ruby: ["3.1", "3.2", "3.3", "3.4.0-rc1", "truffleruby"]
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
@@ -136,7 +126,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4.0-rc1"]
+        ruby: ["3.1", "3.2", "3.3", "3.4.0-rc1"]
     runs-on: "macos-13"
     steps:
       - uses: actions/checkout@v4
@@ -149,24 +139,6 @@ jobs:
           name: cruby-gem
           path: pkg
       - run: ./scripts/test-gem-install
-        env:
-          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
-
-  test-windows-2019:
-    needs: "build-cruby-gem"
-    runs-on: "windows-2019"
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.0"
-          bundler-cache: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: cruby-gem
-          path: pkg
-      - run: ./scripts/test-gem-install
-        shell: bash
         env:
           BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
 
@@ -218,7 +190,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -239,7 +211,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -260,7 +232,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -274,14 +246,14 @@ jobs:
           docker run --rm -v "$(pwd):/argon2id" -w /argon2id \
             --platform=linux/arm/v7 \
             ruby:${{ matrix.ruby }} \
-            ./scripts/test-gem-install
+            sh -c "gem update --system && ./scripts/test-gem-install"
 
   test-precompiled-arm-linux-musl:
     needs: "precompile-arm-linux-musl"
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -302,7 +274,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -323,7 +295,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -344,7 +316,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4.0-rc1"]
+        ruby: ["3.1", "3.2", "3.3", "3.4.0-rc1"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -365,7 +337,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4-rc"]
+        ruby: ["3.1", "3.2", "3.3", "3.4-rc"]
     runs-on: ubuntu-latest
     container:
       image: "ruby:${{ matrix.ruby }}-alpine"
@@ -383,7 +355,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4.0-rc1"]
+        ruby: ["3.1", "3.2", "3.3", "3.4.0-rc1"]
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
@@ -404,7 +376,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", "3.1", "3.2", "3.3", "3.4.0-rc1"]
+        ruby: ["3.1", "3.2", "3.3", "3.4.0-rc1"]
     runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
@@ -453,24 +425,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: cruby-x64-mingw-ucrt-gem
-          path: pkg
-      - run: ./scripts/test-gem-install
-        shell: bash
-        env:
-          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
-
-  test-precompiled-x64-mingw32:
-    needs: "precompile-x64-mingw32"
-    runs-on: windows-2019
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.0"
-          bundler-cache: true
-      - uses: actions/download-artifact@v4
-        with:
-          name: cruby-x64-mingw32-gem
           path: pkg
       - run: ./scripts/test-gem-install
         shell: bash
