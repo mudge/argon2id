@@ -257,7 +257,7 @@ User.find_by(name: "alice")&.authenticate("password") #=> user
 
 This gem requires any of the following to run:
 
-* [Ruby](https://www.ruby-lang.org/en/) 2.6 to 3.3
+* [Ruby](https://www.ruby-lang.org/en/) 3.0 to 3.4.0-rc1
 * [JRuby](https://www.jruby.org) 9.4
 * [TruffleRuby](https://www.graalvm.org/ruby/) 24.1
 
@@ -271,9 +271,8 @@ This gem requires any of the following to run:
 Where possible, a pre-compiled native gem will be provided for the following platforms:
 
 * Linux
-    * `aarch64-linux` and `arm-linux` (requires [glibc](https://www.gnu.org/software/libc/) 2.29+)
-    * `x86-linux` and `x86_64-linux` (requires [glibc](https://www.gnu.org/software/libc/) 2.17+)
-    * [musl](https://musl.libc.org/)-based systems such as [Alpine](https://alpinelinux.org) are supported as long as a [glibc-compatible library is installed](https://wiki.alpinelinux.org/wiki/Running_glibc_programs)
+    * `aarch64-linux`, `arm-linux`, `x86-linux`, `x86_64-linux` (requires [glibc](https://www.gnu.org/software/libc/) 2.29+, RubyGems 3.3.22+ and Bundler 2.3.21+)
+    * [musl](https://musl.libc.org/)-based systems such as [Alpine](https://alpinelinux.org) are supported with Bundler 2.5.6+
 * macOS `x86_64-darwin` and `arm64-darwin`
 * Windows `x64-mingw32` and `x64-mingw-ucrt`
 * Java: any platform running JRuby 9.4 or higher
