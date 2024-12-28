@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
     "source_code_uri" => "https://github.com/mudge/argon2id",
     "rubygems_mfa_required" => "true"
   }
-  s.required_ruby_version = ">= 3.1.0"
+  s.required_ruby_version = ">= 3.0.0"
   s.extensions = ["ext/argon2id/extconf.rb"]
   s.files = [
     "CHANGELOG.md",
