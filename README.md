@@ -257,7 +257,7 @@ User.find_by(name: "alice")&.authenticate("password") #=> user
 
 This gem requires any of the following to run:
 
-* [Ruby](https://www.ruby-lang.org/en/) 3.0 to 3.4.0-rc1
+* [Ruby](https://www.ruby-lang.org/en/) 2.6 to 3.4
 * [JRuby](https://www.jruby.org) 9.4
 * [TruffleRuby](https://www.graalvm.org/ruby/) 24.1
 
