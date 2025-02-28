@@ -20,7 +20,7 @@ cross_platforms = %w[
   x86_64-linux-musl
 ].freeze
 
-ENV["RUBY_CC_VERSION"] = "3.4.1:3.3.5:3.2.6:3.1.6:3.0.7:2.7.8:2.6.10"
+RakeCompilerDock.set_ruby_cc_version("~> 2.6", "~> 3.0")
 
 gemspec = Gem::Specification.load("argon2id.gemspec")
 
@@ -59,6 +59,7 @@ namespace :gem do
     desc "Compile and build native gem for #{platform}"
     task platform do
       RakeCompilerDock.sh <<~SCRIPT, platform: platform, verbose: true
+        rbenv shell 3.1.6 &&
         gem install bundler --no-document &&
         bundle &&
         bundle exec rake native:#{platform} pkg/#{gemspec.full_name}-#{Gem::Platform.new(platform)}.gem PATH="/usr/local/bin:$PATH"

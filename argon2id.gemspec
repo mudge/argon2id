@@ -54,6 +54,6 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--main", "README.md"]
 
   s.add_development_dependency("rake-compiler", "~> 1.2")
-  s.add_development_dependency("rake-compiler-dock", "~> 1.8")
+  s.add_development_dependency("rake-compiler-dock", "~> 1.9")
   s.add_development_dependency("minitest", "~> 5.25")
 end

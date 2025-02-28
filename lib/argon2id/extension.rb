@@ -10,6 +10,7 @@ if RUBY_PLATFORM == "java"
     class Password
       def self.hash_encoded(t_cost, m_cost, parallelism, pwd, salt, hashlen)
         raise Error, "Salt is too short" if salt.empty?
+        raise Error, "Memory cost is too small" if m_cost < 8
 
         salt_bytes = salt.to_java_bytes
         output = Java::byte[hashlen].new
