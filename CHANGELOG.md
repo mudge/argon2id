@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2025-12-30
+
+### Added
+- Add support for Ruby 4.0 in precompiled, native gems.
+
+### Removed
+- Remove support and native gems for Ruby 2.6, 2.7, and 3.0.
+- Remove native gems for 32-bit platforms, specifically x86-linux-gnu,
+  x86-linux-musl, and x86-mingw32
+
 ## [0.8.0] - 2024-12-29
 
 ### Added
@@ -141,6 +151,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference C implementation of Argon2, the password-hashing function that won
   the Password Hashing Competition.
 
+[0.9.0]: https://github.com/mudge/argon2id/releases/tag/v0.9.0
 [0.8.0]: https://github.com/mudge/argon2id/releases/tag/v0.8.0
 [0.8.0.rc1]: https://github.com/mudge/argon2id/releases/tag/v0.8.0.rc1
 [0.7.0]: https://github.com/mudge/argon2id/releases/tag/v0.7.0
