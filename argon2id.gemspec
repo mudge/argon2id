@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
     "source_code_uri" => "https://github.com/mudge/argon2id",
     "rubygems_mfa_required" => "true"
   }
-  s.required_ruby_version = ">= 2.6.0"
+  s.required_ruby_version = ">= 3.1.0"
   s.extensions = ["ext/argon2id/extconf.rb"]
   s.files = [
     "CHANGELOG.md",
@@ -53,7 +53,7 @@ Gem::Specification.new do |s|
   ]
   s.rdoc_options = ["--main", "README.md"]
 
-  s.add_development_dependency("rake-compiler", "~> 1.2")
-  s.add_development_dependency("rake-compiler-dock", "~> 1.9")
+  s.add_development_dependency("rake-compiler", "~> 1.3")
+  s.add_development_dependency("rake-compiler-dock", "~> 1.11")
   s.add_development_dependency("minitest", "~> 5.25")
 end

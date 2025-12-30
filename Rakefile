@@ -11,16 +11,12 @@ cross_platforms = %w[
   arm-linux-musl
   arm64-darwin
   x64-mingw-ucrt
-  x64-mingw32
-  x86-linux-gnu
-  x86-linux-musl
-  x86-mingw32
   x86_64-darwin
   x86_64-linux-gnu
   x86_64-linux-musl
 ].freeze
 
-RakeCompilerDock.set_ruby_cc_version("~> 2.6", "~> 3.0")
+RakeCompilerDock.set_ruby_cc_version("~> 3.1", "~> 4.0")
 
 gemspec = Gem::Specification.load("argon2id.gemspec")
 
@@ -31,7 +27,6 @@ namespace :java do
   java_gemspec.files.reject! { |path| File.fnmatch?("ext/*", path) }
   java_gemspec.extensions.clear
   java_gemspec.platform = Gem::Platform.new("java")
-  java_gemspec.required_ruby_version = ">= 3.1.0"
 
   Gem::PackageTask.new(java_gemspec).define
 end
@@ -59,9 +54,8 @@ namespace :gem do
     desc "Compile and build native gem for #{platform}"
     task platform do
       RakeCompilerDock.sh <<~SCRIPT, platform: platform, verbose: true
-        rbenv shell 3.1.6 &&
         gem install bundler --no-document &&
-        bundle &&
+        bundle install &&
         bundle exec rake native:#{platform} pkg/#{gemspec.full_name}-#{Gem::Platform.new(platform)}.gem PATH="/usr/local/bin:$PATH"
       SCRIPT
     end
