@@ -13,6 +13,7 @@ rb_argon2id_hash_encoded(VALUE klass, VALUE iterations, VALUE memory, VALUE thre
 {
   uint32_t t_cost, m_cost, parallelism, outlen;
   size_t encodedlen;
+  long saltlen;
   char * encoded;
   int result;
   VALUE hash;
@@ -28,7 +29,12 @@ rb_argon2id_hash_encoded(VALUE klass, VALUE iterations, VALUE memory, VALUE thre
   parallelism = NUM2UINT(threads);
   outlen = NUM2UINT(hashlen);
 
-  encodedlen = argon2_encodedlen(t_cost, m_cost, parallelism, (uint32_t)RSTRING_LEN(salt), outlen, Argon2_id);
+  saltlen = RSTRING_LEN(salt);
+  if (saltlen > UINT32_MAX) {
+    rb_raise(rb_eRangeError, "salt too long");
+  }
+
+  encodedlen = argon2_encodedlen(t_cost, m_cost, parallelism, (uint32_t)saltlen, outlen, Argon2_id);
   encoded = malloc(encodedlen);
   if (!encoded) {
     rb_raise(rb_eNoMemError, "not enough memory to allocate for encoded password");
