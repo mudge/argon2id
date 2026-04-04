@@ -11,26 +11,30 @@ ID id_encoded;
 static VALUE
 rb_argon2id_hash_encoded(VALUE klass, VALUE iterations, VALUE memory, VALUE threads, VALUE pwd, VALUE salt, VALUE hashlen)
 {
-  uint32_t t_cost, m_cost, parallelism;
-  size_t encodedlen, outlen;
+  uint32_t t_cost, m_cost, parallelism, outlen;
+  size_t encodedlen;
   char * encoded;
   int result;
   VALUE hash;
 
   UNUSED(klass);
 
-  t_cost = FIX2INT(iterations);
-  m_cost = FIX2INT(memory);
-  parallelism = FIX2INT(threads);
-  outlen = FIX2INT(hashlen);
+  /* Ensure pwd and salt are strings. */
+  StringValue(pwd);
+  StringValue(salt);
 
-  encodedlen = argon2_encodedlen(t_cost, m_cost, parallelism, (uint32_t)RSTRING_LEN(salt), (uint32_t)outlen, Argon2_id);
+  t_cost = NUM2UINT(iterations);
+  m_cost = NUM2UINT(memory);
+  parallelism = NUM2UINT(threads);
+  outlen = NUM2UINT(hashlen);
+
+  encodedlen = argon2_encodedlen(t_cost, m_cost, parallelism, (uint32_t)RSTRING_LEN(salt), outlen, Argon2_id);
   encoded = malloc(encodedlen);
   if (!encoded) {
     rb_raise(rb_eNoMemError, "not enough memory to allocate for encoded password");
   }
 
-  result = argon2id_hash_encoded(t_cost, m_cost, parallelism, StringValuePtr(pwd), RSTRING_LEN(pwd), StringValuePtr(salt), RSTRING_LEN(salt), outlen, encoded, encodedlen);
+  result = argon2id_hash_encoded(t_cost, m_cost, parallelism, RSTRING_PTR(pwd), RSTRING_LEN(pwd), RSTRING_PTR(salt), RSTRING_LEN(salt), outlen, encoded, encodedlen);
 
   if (result != ARGON2_OK) {
     free(encoded);
@@ -49,7 +53,12 @@ rb_argon2id_verify(VALUE self, VALUE pwd) {
   VALUE encoded;
 
   encoded = rb_ivar_get(self, id_encoded);
-  result = argon2id_verify(StringValueCStr(encoded), StringValuePtr(pwd), RSTRING_LEN(pwd));
+
+  /* Ensure encoded and pwd are strings. */
+  StringValueCStr(encoded);
+  StringValue(pwd);
+
+  result = argon2id_verify(RSTRING_PTR(encoded), RSTRING_PTR(pwd), RSTRING_LEN(pwd));
   if (result == ARGON2_OK) {
     return Qtrue;
   }
