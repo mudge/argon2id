@@ -188,6 +188,42 @@ class TestPassword < Minitest::Test
     assert password == "password"
   end
 
+  def test_new_password_is_frozen
+    password = Argon2id::Password.new(
+      "$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ" \
+      "$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4"
+    )
+
+    assert password.frozen?
+  end
+
+  def test_encoded_is_frozen
+    password = Argon2id::Password.new(
+      "$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ" \
+      "$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4"
+    )
+
+    assert password.encoded.frozen?
+  end
+
+  def test_salt_is_frozen
+    password = Argon2id::Password.new(
+      "$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ" \
+      "$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4"
+    )
+
+    assert password.salt.frozen?
+  end
+
+  def test_output_is_frozen
+    password = Argon2id::Password.new(
+      "$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ" \
+      "$nf65EOgLrQMR/uIPnA4rEsF5h7TKyQwu9U1bMCHGi/4"
+    )
+
+    assert password.output.frozen?
+  end
+
   def test_encoded_returns_the_full_encoded_hash
     password = Argon2id::Password.new(
       "$argon2id$v=19$m=256,t=2,p=1$c29tZXNhbHQ" \
@@ -524,6 +560,12 @@ class TestPassword < Minitest::Test
     assert_equal(8, password.output.bytesize)
   ensure
     Argon2id.output_len = Argon2id::DEFAULT_OUTPUT_LEN
+  end
+
+  def test_create_password_is_frozen
+    password = Argon2id::Password.create("password")
+
+    assert password.frozen?
   end
 
   def test_create_password_equals_correct_password

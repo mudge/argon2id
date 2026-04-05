@@ -115,13 +115,14 @@ module Argon2id
     def initialize(encoded)
       raise ArgumentError, "invalid hash" unless PATTERN =~ String(encoded)
 
-      @encoded = $&
+      @encoded = $&.freeze
       @version = Integer($1 || 0x10)
       @m_cost = Integer($2)
       @t_cost = Integer($3)
       @parallelism = Integer($4)
-      @salt = $5.unpack1("m")
-      @output = $6.unpack1("m")
+      @salt = $5.unpack1("m").freeze
+      @output = $6.unpack1("m").freeze
+      freeze
     end
 
     # Return the encoded password hash.
