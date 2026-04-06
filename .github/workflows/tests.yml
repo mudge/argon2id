@@ -20,7 +20,7 @@ jobs:
   build-cruby-gem:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "4.0"
@@ -34,7 +34,7 @@ jobs:
   build-jruby-gem:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "4.0"
@@ -98,7 +98,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0", "truffleruby"]
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -119,7 +119,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: "macos-14"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -140,7 +140,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: "windows-2022"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
@@ -162,7 +162,7 @@ jobs:
     env:
       MAKE: gmake
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           name: cruby-gem
@@ -183,7 +183,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           name: cruby-aarch64-linux-gnu-gem
@@ -204,7 +204,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           name: cruby-aarch64-linux-musl-gem
@@ -225,7 +225,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           name: cruby-arm-linux-gnu-gem
@@ -246,7 +246,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           name: cruby-arm-linux-musl-gem
@@ -267,7 +267,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -290,7 +290,7 @@ jobs:
     container:
       image: "ruby:${{ matrix.ruby }}-alpine"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           name: cruby-x86_64-linux-musl-gem
@@ -305,7 +305,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -326,7 +326,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: "macos-15-intel"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -347,7 +347,7 @@ jobs:
         ruby: ["jruby-9.4", "jruby-10.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -368,7 +368,7 @@ jobs:
         ruby: ["3.1", "3.2", "3.3", "3.4", "4.0"]
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: MSP-Greg/setup-ruby-pkgs@v1
         with:
           ruby-version: "${{ matrix.ruby }}"
@@ -387,7 +387,7 @@ jobs:
     env:
       BUNDLE_WITH: memcheck
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby-pkgs@v1
         with:
           ruby-version: "4.0"
