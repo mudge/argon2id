@@ -17,7 +17,7 @@ jobs:
           ruby-version: "4.0"
           bundler-cache: true
       - run: bundle exec rake gem:${{ inputs.platform }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: "cruby-${{ inputs.platform }}-gem"
           path: pkg/*.gem

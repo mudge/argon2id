@@ -26,7 +26,7 @@ jobs:
           ruby-version: "4.0"
           bundler-cache: true
       - run: bundle exec rake gem
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: cruby-gem
           path: pkg/*.gem
@@ -40,7 +40,7 @@ jobs:
           ruby-version: "4.0"
           bundler-cache: true
       - run: bundle exec rake java:gem
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: jruby-gem
           path: pkg/*.gem
