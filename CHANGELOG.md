@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-04-06
+
+### Changed
+
+- Hashing and verifying passwords no longer holds the Ruby Global VM Lock
+  during the intentionally expensive computation of the Argon2id hash, allowing
+  other threads to do work at the same time.
+- Argon2id::Password objects, their encoded password hash, salt, and hash
+  output strings are now all frozen to prevent mutation. Inputs are also now
+  frozen ASAP during hashing and verification to prevent mutation before
+  passing to the internal C/Java implementation of Argon2.
+- The extension is now flagged as safe to use with Ractors.
+
 ## [0.9.0] - 2025-12-30
 
 ### Added
@@ -151,6 +164,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference C implementation of Argon2, the password-hashing function that won
   the Password Hashing Competition.
 
+[0.10.0]: https://github.com/mudge/argon2id/releases/tag/v0.10.0
 [0.9.0]: https://github.com/mudge/argon2id/releases/tag/v0.9.0
 [0.8.0]: https://github.com/mudge/argon2id/releases/tag/v0.8.0
 [0.8.0.rc1]: https://github.com/mudge/argon2id/releases/tag/v0.8.0.rc1
