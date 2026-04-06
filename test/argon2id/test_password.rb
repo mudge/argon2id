@@ -580,6 +580,31 @@ class TestPassword < Minitest::Test
     refute password == "differentpassword"
   end
 
+  def test_create_is_thread_safe
+    threads = 10.times.map do |i|
+      Thread.new(i) do |n|
+        password = Argon2id::Password.create("password-#{n}", t_cost: 2, m_cost: 256, parallelism: 1)
+        assert password == "password-#{n}"
+      end
+    end
+
+    threads.each(&:value)
+  end
+
+  def test_verify_is_thread_safe
+    hash = Argon2id::Password.create("password", t_cost: 2, m_cost: 256, parallelism: 1).to_s
+
+    threads = 10.times.map do |i|
+      Thread.new do
+        password = Argon2id::Password.new(hash)
+        assert password == "password"
+        refute password == "wrong"
+      end
+    end
+
+    threads.each(&:value)
+  end
+
   def test_hashing_password_verifies_correct_password
     hash = Argon2id::Password.create("password").to_s
     password = Argon2id::Password.new(hash)
